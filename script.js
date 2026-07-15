@@ -76,20 +76,89 @@ if (!isHome) {
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 }
 
-// ── Home: loader → name draw sequence ────────────────────
+// ── Home: gong gate → name draw sequence ──────────────────
 if (isHome) {
-  window.addEventListener('load', () => {
-    const loader = document.getElementById('loader');
-    const hero   = document.querySelector('.hero');
+  const gate    = document.getElementById('gongGate');
+  const gongBtn = document.getElementById('gongBtn');
+  const gateCta = document.getElementById('gateCta');
+  const dots    = gate ? [...gate.querySelectorAll('.gate-dot')] : [];
+  const hero    = document.querySelector('.hero');
+  const palette = ['#ff6b57', '#f2ae40', '#2f9e94', '#7c6bd8', '#e7527a'];
+  let hits = 0;
+  let onCooldown = false;
+  const HIT_COOLDOWN_MS = 1000;
 
-    setTimeout(() => {
-      if (loader) {
-        loader.classList.add('out');
+  const gongSound      = new Audio('assets/gong-hit.mp3');
+  const gongSoundFinal = new Audio('assets/gong-hit-3.mp3');
+  gongSound.preload      = 'auto';
+  gongSoundFinal.preload = 'auto';
+
+  function playGongHit(isFinal) {
+    try {
+      const sound = (isFinal ? gongSoundFinal : gongSound).cloneNode();
+      sound.play().catch(() => {});
+    } catch (e) { /* audio unsupported — visuals still play */ }
+  }
+
+  function spawnSplash(x, y) {
+    const s = document.createElement('div');
+    const size = 60 + Math.random() * 120;
+    s.className = 'splash';
+    s.style.left = (x - size / 2) + 'px';
+    s.style.top  = (y - size / 2) + 'px';
+    s.style.width = s.style.height = size + 'px';
+    s.style.background = palette[Math.floor(Math.random() * palette.length)];
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 950);
+  }
+
+  function ringPing() {
+    const ring = document.createElement('span');
+    ring.className = 'gong-ring ping';
+    gongBtn.appendChild(ring);
+    setTimeout(() => ring.remove(), 950);
+  }
+
+  function startHero() {
+    if (hero) hero.classList.add('animate');
+  }
+
+  if (gongBtn) {
+    gongBtn.addEventListener('mouseenter', () => document.body.classList.add('mallet-cursor'));
+    gongBtn.addEventListener('mouseleave', () => document.body.classList.remove('mallet-cursor'));
+
+    gongBtn.addEventListener('click', e => {
+      if (hits >= 3 || onCooldown) return;
+      hits++;
+      playGongHit(hits === 3);
+      ringPing();
+      spawnSplash(e.clientX, e.clientY);
+      gongBtn.classList.remove('hit');
+      void gongBtn.offsetWidth;
+      gongBtn.classList.add('hit');
+      if (dots[hits - 1]) dots[hits - 1].classList.add('hit');
+      if (gateCta) gateCta.textContent = hits < 3 ? `${hits} of 3 — bang again!` : 'Entering…';
+
+      if (hits < 3) {
+        onCooldown = true;
+        gongBtn.classList.add('cooldown');
         setTimeout(() => {
-          if (loader) loader.style.display = 'none';
-          if (hero)   hero.classList.add('animate');
-        }, 700);
+          onCooldown = false;
+          gongBtn.classList.remove('cooldown');
+        }, HIT_COOLDOWN_MS);
       }
-    }, 2600);
-  });
+
+      if (hits === 3) {
+        setTimeout(() => {
+          gate.classList.add('leaving');
+          setTimeout(() => {
+            gate.style.display = 'none';
+            startHero();
+          }, 900);
+        }, 500);
+      }
+    });
+  } else {
+    startHero();
+  }
 }

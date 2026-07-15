@@ -6,15 +6,23 @@
   <title>Andrew Gio Kang</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Space+Grotesk:wght@300;400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Space+Grotesk:wght@300;400&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="page-home">
 
-  <!-- Loader -->
-  <div class="loader" id="loader">
-    <div class="loader-line"></div>
-    <div class="loader-name">ANDREW GIO KANG</div>
+  <!-- Gong Gate — entry ritual -->
+  <div class="gong-gate" id="gongGate">
+    <p class="gate-eyebrow">Welcome</p>
+    <button class="gong-wrap" id="gongBtn" aria-label="Bang the gong to enter">
+      <img src="assets/gong.jpg" alt="Watercolor gong" class="gong-img" id="gongImg">
+    </button>
+    <p class="gate-cta" id="gateCta">Bang the gong three times to enter!</p>
+    <div class="gate-dots" id="gateDots">
+      <span class="gate-dot"></span>
+      <span class="gate-dot"></span>
+      <span class="gate-dot"></span>
+    </div>
   </div>
 
   <!-- Nav -->
@@ -32,7 +40,11 @@
 
   <!-- Hero — full screen, no scroll -->
   <section class="hero">
-    <div class="orb"></div>
+    <div class="orb">
+      <span class="orb-ring orb-ring-1"></span>
+      <span class="orb-ring orb-ring-2"></span>
+      <span class="orb-ring orb-ring-3"></span>
+    </div>
 
     <div class="hero-name" id="heroName">
       <div class="name-outline-wrap">
