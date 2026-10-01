@@ -5,51 +5,41 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Film &amp; Media — Andrew Gio Kang</title>
   <meta name="description" content="Short films and social media work by Andrew Gio Kang.">
-  <meta name="theme-color" content="#2a1a12">
+  <meta name="theme-color" content="#06283a">
   <link rel="preload" as="audio" href="assets/sfx/shocked.mp3">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- only downloaded where Avenir isn't installed (Windows, Android) -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap" rel="stylesheet">
   <style>
-    /* Palatino Medium, falling back through the common Palatino cuts */
-    @font-face {
-      font-family: "AGK Palatino";
-      src: local("Palatino Medium"), local("Palatino-Medium"),
-           local("Palatino nova Medium"), local("PalatinoNova-Medium"),
-           local("Palatino LT Std Medium"), local("PalatinoLTStd-Medium"),
-           local("Palatino Linotype"), local("PalatinoLinotype-Roman"),
-           local("Palatino"), local("Palatino-Roman"), local("Book Antiqua");
-      font-weight: 500;
-      font-style: normal;
-    }
-    @font-face {
-      font-family: "AGK Palatino";
-      src: local("Palatino Medium Italic"), local("Palatino-MediumItalic"),
-           local("Palatino nova Medium Italic"), local("PalatinoNova-MediumItalic"),
-           local("Palatino LT Std Medium Italic"), local("PalatinoLTStd-MediumItalic"),
-           local("Palatino Linotype Italic"), local("PalatinoLinotype-Italic"),
-           local("Palatino Italic"), local("Palatino-Italic"), local("Book Antiqua Italic");
-      font-weight: 500;
-      font-style: italic;
-    }
-
     :root {
       --vh: 1vh;
-      --floor: calc(76 * var(--vh));
-      --paper: #fffcf3;
-      --ink-dark: #16343e;
-      --coral: #ff6a4d;
-      --gold: #d4b066;
-      --serif: "AGK Palatino", "Palatino Linotype", Palatino, "Book Antiqua",
-               "URW Palladio L", P052, Georgia, serif;
-      --spring: cubic-bezier(.34, 1.56, .64, 1);
+      --beam: calc(11 * var(--vh));     /* bottom of the entablature */
+      --floor: calc(78 * var(--vh));    /* top of the stylobate */
+      --sans: "Avenir Next", "Avenir", "Avenir Next LT Pro", "Nunito Sans", "Segoe UI", system-ui, sans-serif;
+      --sand: #ece3c8;
+      --sand-dim: rgba(236, 227, 200, .64);
+      --stone-hi: #bcd2cb;
+      --stone: #93b2ac;
+      --stone-mid: #6d918c;
+      --stone-dk: #44625f;
+      --carve: #2a4646;
+      --bronze-hi: #d4b47a;
+      --bronze: #8d6f43;
+      --bronze-dk: #4b3b24;
+      --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .1  0 0 0 0 .18  0 0 0 0 .18  0 0 0 .32 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+      --meander-carved: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40' width='40' height='40'%3E%3Cg fill='none' stroke='%232a4646' stroke-opacity='.55' stroke-width='2.5' stroke-linecap='square'%3E%3Cpath d='M0 35H40M0 4H40M7 35V10H33V29H15V17H25'/%3E%3C/g%3E%3C/svg%3E");
+      --meander: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40' width='40' height='40'%3E%3Cg fill='none' stroke='%23c9a96c' stroke-width='3' stroke-linecap='square'%3E%3Cpath d='M0 35H40M0 4H40M7 35V10H33V29H15V17H25'/%3E%3C/g%3E%3C/svg%3E");
     }
     @supports (height: 1svh) { :root { --vh: 1svh; } }
 
     *, *::before, *::after { box-sizing: border-box; }
     html, body { margin: 0; height: 100%; }
     body {
-      background: #2a1a12;
-      color: var(--ink-dark);
-      font-family: var(--serif);
-      font-weight: 500;
+      background: #031822;
+      color: var(--sand);
+      font-family: var(--sans);
+      font-weight: 400;
       overflow: hidden;
       -webkit-font-smoothing: antialiased;
       -webkit-tap-highlight-color: transparent;
@@ -57,244 +47,344 @@
     a { color: inherit; }
     button { font: inherit; color: inherit; }
 
-    /* lights come up when you walk in */
+    /* the water fades in as you arrive */
     body::after {
       content: "";
       position: fixed;
       inset: 0;
       z-index: 40;
-      background: #0b0604;
-      opacity: .9;
+      background: #021018;
+      opacity: 1;
       pointer-events: none;
-      transition: opacity 1.2s ease .1s;
+      transition: opacity 1.4s ease .1s;
     }
     body.lit::after { opacity: 0; }
 
-    /* ---------- The hall: one long side-scrolling corridor ---------- */
+    /* ---------- The open ocean behind the colonnade ---------- */
+    .sea {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(120% 75% at 50% -12%, #2f93a6 0%, #12607a 30%, #0a3a4e 62%, #041d29 100%);
+    }
+    .ray {
+      position: absolute;
+      top: -12%;
+      left: var(--x);
+      width: var(--w);
+      height: 125%;
+      transform-origin: 50% 0;
+      rotate: var(--r);
+      background: linear-gradient(180deg, rgba(196, 244, 246, .24), rgba(196, 244, 246, .07) 50%, rgba(196, 244, 246, 0) 78%);
+      filter: blur(14px);
+      mix-blend-mode: screen;
+      animation: ray var(--d) ease-in-out infinite alternate;
+    }
+    @keyframes ray { from { opacity: .35; translate: -1.5vw 0; } to { opacity: 1; translate: 1.5vw 0; } }
+
+    .ruins {
+      position: absolute;
+      left: 0;
+      bottom: calc(100 * var(--vh) - var(--floor) - 2 * var(--vh));
+      width: 600vw;
+      height: calc(30 * var(--vh));
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 300'%3E%3Cg fill='%230b3949'%3E%3Cpath d='M0 300V272Q150 258 300 268T600 262T900 270T1200 264V300Z'/%3E%3Cpath d='M70 272V152l9-8 7 11 10-6 6 9v114z'/%3E%3Crect x='150' y='205' width='22' height='67'/%3E%3Cpath d='M352 272v-16h296v16zM372 256V150h22v106zm56 0V150h22v106zm56 0V150h22v106zm56 0V150h22v106zm56 0V150h22v106zM362 150v-16h276v16zm-4-16 142-50 142 50z'/%3E%3Cpath d='M790 272V168a62 62 0 0 1 124 0v104h-26V172a36 36 0 0 0-72 0v100z'/%3E%3Cpath d='M1010 272V96l8-7 6 9 9-11 7 10v175z'/%3E%3Cpath d='M1080 272v-48a50 50 0 0 1 100 0v48z'/%3E%3C/g%3E%3C/svg%3E") repeat-x 0 100% / auto 100%;
+      opacity: .9;
+      will-change: transform;
+    }
+    .fish {
+      position: absolute;
+      top: var(--y);
+      left: 0;
+      width: var(--s);
+      color: #0b3a4a;
+      opacity: .75;
+      animation: swim var(--d) linear var(--delay) infinite;
+    }
+    .fish svg { display: block; width: 100%; animation: wiggle 1.2s ease-in-out infinite; }
+    .fish--back { scale: -1 1; animation-direction: reverse; }
+    @keyframes swim { from { translate: -12vw 0; } to { translate: 112vw 0; } }
+    @keyframes wiggle { 50% { translate: 0 3px; rotate: 2deg; } }
+    .snow { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+    /* ---------- The colonnade (scrolls sideways) ---------- */
     .hall {
       position: fixed;
       inset: 0;
-      display: flex;
+      z-index: 1;
       overflow-x: auto;
       overflow-y: hidden;
       overscroll-behavior: contain;
-      scroll-snap-type: x proximity;
       scrollbar-width: none;
       outline: none;
     }
     .hall::-webkit-scrollbar { display: none; }
+    @media (pointer: coarse) { .hall { scroll-snap-type: x mandatory; } }
+    [data-stop] { scroll-snap-align: center; scroll-snap-stop: always; }
 
-    .room {
-      --wains: calc(13 * var(--vh));
-      --trim: #c9a457;
-      --trim-dark: #8a6a2c;
+    .track {
       position: relative;
-      flex: none;
-      height: 100%;
       display: flex;
-      gap: clamp(64px, 8vw, 130px);
-      padding: 0 clamp(80px, 9vw, 150px);
-      color: var(--ink);
-      background:
-        /* crown molding */
-        linear-gradient(180deg, var(--trim-dark) 0 5px, var(--trim) 5px 15px, var(--trim-dark) 15px 17px, rgba(0, 0, 0, .3) 17px, rgba(0, 0, 0, 0) 34px) 0 0 / 100% 34px no-repeat,
-        /* chair rail */
-        linear-gradient(180deg, var(--trim) 0 5px, var(--trim-dark) 5px 7px) 0 calc(var(--floor) - var(--wains) - 7px) / 100% 7px no-repeat,
-        /* wainscot */
-        linear-gradient(180deg, rgba(255, 255, 255, .06), rgba(0, 0, 0, .14)) 0 calc(var(--floor) - var(--wains)) / 100% var(--wains) no-repeat,
-        repeating-linear-gradient(90deg, var(--panel) 0 118px, rgba(0, 0, 0, .28) 118px 121px, var(--panel) 121px 124px) 0 calc(var(--floor) - var(--wains)) / 100% var(--wains) no-repeat,
-        /* baseboard */
-        linear-gradient(180deg, #24140c 0 3px, #3a2315 3px) 0 calc(var(--floor) - 14px) / 100% 14px no-repeat,
-        /* floor: shading, plank rows, plank seams */
-        linear-gradient(180deg, rgba(0, 0, 0, .5), rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, .18)) 0 var(--floor) / 100% calc(100% - var(--floor)) no-repeat,
-        repeating-linear-gradient(180deg, rgba(0, 0, 0, 0) 0 34px, rgba(0, 0, 0, .22) 34px 36px) 0 var(--floor) / 100% calc(100% - var(--floor)) no-repeat,
-        repeating-linear-gradient(90deg, #8e5c36 0 148px, #5e3a20 148px 150px, #85552f 150px 298px, #5e3a20 298px 300px) 0 var(--floor) / 100% calc(100% - var(--floor)) no-repeat,
-        /* wallpaper */
-        repeating-linear-gradient(90deg, var(--wall) 0 34px, var(--wall-2) 34px 36px);
+      height: 100%;
+      width: max-content;
+      gap: clamp(30px, 4vw, 70px);
+      padding-right: clamp(30px, 4vw, 70px);
     }
-    .room--lobby, .room--exit { --wall: #ece2cc; --wall-2: #e4d8bf; --panel: #d8c9a8; --ink: #3a2a1a; --ink-soft: rgba(58, 42, 26, .72); }
-    .room--films { --wall: #5b1f26; --wall-2: #531c22; --panel: #42161b; --ink: #f6ead3; --ink-soft: rgba(246, 234, 211, .74); }
-    .room--ig    { --wall: #1f4a46; --wall-2: #1c433f; --panel: #163531; --ink: #eef4ec; --ink-soft: rgba(238, 244, 236, .74); }
-    .room--tt    { --wall: #1f2843; --wall-2: #1c243d; --panel: #151b2f; --ink: #eef0f7; --ink-soft: rgba(238, 240, 247, .74); }
-
-    /* stone pilaster between rooms */
-    .room + .room::before {
+    /* entablature: cornice, dentils, bronze meander frieze, architrave */
+    .track::before {
       content: "";
       position: absolute;
-      z-index: 2;
-      left: -30px;
+      z-index: 3;
+      left: 0;
+      right: 0;
       top: 0;
-      width: 60px;
-      height: var(--floor);
+      height: var(--beam);
       background:
-        linear-gradient(180deg, #f2e9d6 0 26px, #c2b393 26px 30px, rgba(0, 0, 0, 0) 30px),
-        linear-gradient(0deg, #ece2cc 0 20px, #bfb08f 20px 23px, rgba(0, 0, 0, 0) 23px),
-        linear-gradient(90deg, #b5a685, #f1e9d8 30%, #ddd2ba 58%, #a59676);
-      box-shadow: 8px 0 16px rgba(0, 0, 0, .3), -8px 0 16px rgba(0, 0, 0, .3);
+        linear-gradient(var(--bronze-hi), var(--bronze)) 0 calc(2.6 * var(--vh)) / 100% calc(.35 * var(--vh)) no-repeat,
+        linear-gradient(var(--bronze), var(--bronze-dk)) 0 calc(7.65 * var(--vh)) / 100% calc(.35 * var(--vh)) no-repeat,
+        var(--meander) 0 calc(3.15 * var(--vh)) / auto calc(4.3 * var(--vh)) repeat-x,
+        repeating-linear-gradient(90deg, #9fbcb6 0 12px, #4f716e 12px 20px) 0 calc(1.5 * var(--vh)) / 100% calc(1.1 * var(--vh)) no-repeat,
+        var(--grain),
+        linear-gradient(180deg,
+          #c8dcd5 0, #9dbab4 calc(1.5 * var(--vh)),
+          #4f716e calc(1.5 * var(--vh)), #4f716e calc(2.6 * var(--vh)),
+          #3f605e calc(2.95 * var(--vh)), #3f605e calc(7.65 * var(--vh)),
+          #9ab8b2 calc(8 * var(--vh)), #87a8a2 calc(9.4 * var(--vh)),
+          #a6c2bc calc(9.4 * var(--vh)), #7c9d98 var(--beam));
+      box-shadow: 0 calc(1.4 * var(--vh)) calc(3 * var(--vh)) rgba(0, 12, 18, .5);
+    }
+    /* stylobate and stone floor */
+    .track::after {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      left: 0;
+      right: 0;
+      top: var(--floor);
+      bottom: 0;
+      background:
+        linear-gradient(180deg, #c3d8d1 0, #9cbab3 calc(.5 * var(--vh)), #6a8e89 calc(1.6 * var(--vh)), rgba(0, 0, 0, .35) calc(1.6 * var(--vh)), rgba(0, 0, 0, 0) calc(3.2 * var(--vh))) 0 0 / 100% calc(3.2 * var(--vh)) no-repeat,
+        linear-gradient(rgba(12, 32, 34, .5), rgba(12, 32, 34, .5)) 0 calc(7 * var(--vh)) / 100% 2px no-repeat,
+        linear-gradient(rgba(12, 32, 34, .45), rgba(12, 32, 34, .45)) 0 calc(14 * var(--vh)) / 100% 2px no-repeat,
+        repeating-linear-gradient(90deg, rgba(0, 0, 0, 0) 0 238px, rgba(12, 32, 34, .45) 238px 240px) 0 calc(1.6 * var(--vh)) / 100% 100% no-repeat,
+        var(--grain),
+        linear-gradient(180deg, #557a76 0, #3d605e 45%, #253f40 100%);
+    }
+
+    /* fluted columns */
+    .column {
+      position: relative;
+      z-index: 2;
+      flex: none;
+      align-self: flex-start;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: clamp(40px, 6vh, 66px);
+      height: calc(var(--floor) - var(--beam));
+      margin-top: var(--beam);
+      filter: drop-shadow(0 0 calc(2 * var(--vh)) rgba(0, 14, 20, .35));
+    }
+    .column__cap { position: relative; width: 150%; height: calc(3.4 * var(--vh)); flex: none; }
+    .column__cap::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 42%;
+      background: var(--grain), linear-gradient(180deg, #c9ddd6, #92b1ab);
+    }
+    .column__cap::after {
+      content: "";
+      position: absolute;
+      inset: auto 9% 0;
+      height: 58%;
+      clip-path: polygon(0 0, 100% 0, 86% 100%, 14% 100%);
+      background: var(--grain), linear-gradient(90deg, #6d918c, #c2d7d0 38%, #9dbab4 62%, #5d807b);
+    }
+    .column__shaft {
+      flex: 1;
+      width: 100%;
+      background:
+        var(--grain),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, .1) 0 4px, rgba(0, 0, 0, .14) 4px 5px, rgba(0, 0, 0, 0) 5px 9px),
+        linear-gradient(90deg, #5b7e7a 0%, #b9d0c9 34%, #a3c0ba 55%, #6b8f8a 82%, #4a6b68 100%);
+    }
+    .column__base { position: relative; width: 140%; height: calc(3 * var(--vh)); flex: none; }
+    .column__base::before {
+      content: "";
+      position: absolute;
+      inset: 0 6% 45%;
+      border-radius: 999px;
+      background: var(--grain), linear-gradient(180deg, #c5dad3, #8aaaa4);
+    }
+    .column__base::after {
+      content: "";
+      position: absolute;
+      inset: 55% 0 0;
+      background: var(--grain), linear-gradient(180deg, #a8c4be, #6f938e);
+    }
+    .column--broken .column__cap { display: none; }
+    .column--broken { height: calc(var(--floor) - 34 * var(--vh)); margin-top: calc(34 * var(--vh)); }
+    .column--broken .column__shaft { clip-path: polygon(0 4%, 22% 0, 38% 6%, 61% 1%, 78% 7%, 100% 2%, 100% 100%, 0 100%); }
+
+    .kelp {
+      position: absolute;
+      z-index: 3;
+      bottom: calc(100 * var(--vh) - var(--floor) - 1.4 * var(--vh));
+      height: var(--h, calc(34 * var(--vh)));
+      transform-origin: 50% 100%;
+      color: #2c5a49;
+      pointer-events: none;
+      animation: sway var(--d, 7s) ease-in-out infinite alternate;
+    }
+    .kelp svg { display: block; height: 100%; width: auto; overflow: visible; }
+    @keyframes sway { from { rotate: -3deg; } to { rotate: 3deg; } }
+
+    /* soft shaft of light falling on each exhibit */
+    .shaft {
+      position: absolute;
+      z-index: 0;
+      top: var(--beam);
+      left: -70px;
+      right: -70px;
+      height: calc(var(--floor) - var(--beam) + 6 * var(--vh));
+      clip-path: polygon(36% 0, 64% 0, 100% 100%, 0 100%);
+      background: linear-gradient(180deg, rgba(205, 248, 242, .2), rgba(205, 248, 242, .07) 60%, rgba(205, 248, 242, 0));
+      mix-blend-mode: screen;
+      pointer-events: none;
     }
 
     /* ---------- Lobby ---------- */
-    .room--lobby { width: 100vw; justify-content: center; padding: 0; }
     .lobby {
-      align-self: center;
-      margin-top: calc(-12 * var(--vh));
-      text-align: center;
-      scroll-snap-align: center;
-    }
-    .lobby h1 {
-      margin: 0;
-      font-size: clamp(52px, 8.5vw, 112px);
-      font-weight: 500;
-      font-style: italic;
-      line-height: 1;
-      letter-spacing: -.01em;
-      color: var(--ink);
-    }
-    .lobby__rule {
-      display: block;
-      width: min(380px, 60vw);
-      height: 7px;
-      margin: 22px auto 0;
-      border-top: 2px solid var(--trim);
-      border-bottom: 1px solid var(--trim);
-    }
-    .lobby__hint {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin: 26px 0 0;
-      font-size: 15px;
-      font-style: italic;
-      color: var(--ink-soft);
-    }
-    kbd {
-      display: inline-grid;
-      place-items: center;
-      min-width: 28px;
-      height: 26px;
-      padding: 0 6px;
-      border-radius: 7px;
-      background: var(--paper);
-      box-shadow: 0 2px 0 rgba(58, 42, 26, .3), 0 3px 8px rgba(58, 42, 26, .15);
-      font: inherit;
-      font-style: normal;
-      font-size: 13px;
-      color: var(--ink);
-    }
-
-    /* ---------- Wing intro panels ---------- */
-    .wing-panel {
+      position: relative;
       flex: none;
-      align-self: center;
-      width: clamp(260px, 30vw, 400px);
-      margin-top: calc(-16 * var(--vh));
-      scroll-snap-align: center;
+      width: 100vw;
+      display: flex;
+      justify-content: center;
     }
-    .wing-panel__kicker {
-      margin: 0 0 12px;
-      font-size: 12px;
-      letter-spacing: .26em;
-      text-transform: uppercase;
-      color: var(--gold);
-    }
-    .wing-panel h2 {
-      margin: 0;
-      font-size: clamp(32px, 3.4vw, 52px);
-      font-weight: 500;
-      font-style: italic;
-      line-height: 1.02;
-      overflow-wrap: break-word;
-    }
-    .wing-panel p:not(.wing-panel__kicker) {
-      margin: 18px 0 0;
-      padding-top: 16px;
-      border-top: 1px solid rgba(212, 176, 102, .5);
-      font-size: clamp(15px, 1.25vw, 18px);
-      line-height: 1.5;
-      color: var(--ink-soft);
-    }
-
-    /* ---------- Exhibits ---------- */
-    .exhibit { position: relative; flex: none; scroll-snap-align: center; }
-
-    .lamp {
+    .tablet {
       position: absolute;
-      z-index: 1;
-      top: 30px;
+      z-index: 2;
+      top: calc(25 * var(--vh));
       left: 50%;
-      width: 44px;
-      height: 15px;
       translate: -50% 0;
-      border-radius: 3px 3px 12px 12px;
-      background: linear-gradient(#444, #1b1b1b);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, .45);
+      width: min(760px, 84vw);
+      padding: calc(5 * var(--vh)) clamp(20px, 4vw, 48px) calc(4.4 * var(--vh));
+      text-align: center;
+      color: var(--carve);
+      background: var(--grain), linear-gradient(180deg, #c6dbd4, #98b6b0 70%, #86a6a0);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .25), inset 0 -6px 14px rgba(0, 30, 30, .18), 0 24px 50px rgba(0, 12, 18, .5);
     }
-    .lamp::before {
+    .tablet::before, .tablet::after {
       content: "";
       position: absolute;
-      left: 50%;
       bottom: 100%;
       width: 3px;
-      height: 8px;
-      translate: -50% 0;
-      background: #2a2a2a;
+      height: calc(25 * var(--vh) - var(--beam));
+      background: repeating-linear-gradient(180deg, var(--bronze-hi) 0 5px, rgba(0, 0, 0, 0) 5px 8px);
     }
-    .lamp::after {
-      content: "";
-      position: absolute;
-      left: 50%;
-      bottom: -3px;
-      width: 24px;
-      height: 6px;
-      translate: -50% 0;
-      border-radius: 50%;
-      background: #fff4d4;
-      box-shadow: 0 0 12px 4px rgba(255, 236, 180, .8);
-      opacity: 0;
-      transition: opacity .25s ease;
-      transition-delay: calc(var(--n, 0) * 160ms + 350ms);
+    .tablet::before { left: 16%; }
+    .tablet::after { right: 16%; }
+    .tablet h1 {
+      margin: 0;
+      font-size: clamp(24px, 4vw, 56px);
+      font-weight: 600;
+      line-height: 1.05;
+      letter-spacing: .26em;
+      text-indent: .26em;
+      white-space: nowrap;
+      text-transform: uppercase;
     }
-    .beam {
-      position: absolute;
-      z-index: 0;
-      top: 42px;
-      left: -80px;
-      right: -80px;
-      height: calc(var(--floor) + 5 * var(--vh) - 42px);
-      clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%);
-      background: linear-gradient(180deg, rgba(255, 238, 196, .36), rgba(255, 238, 196, .13) 55%, rgba(255, 238, 196, 0));
-      mix-blend-mode: screen;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity .8s ease;
-      transition-delay: calc(var(--n, 0) * 160ms + 350ms);
-    }
-    .lit .beam, .lit .lamp::after { opacity: 1; }
-
-    /* film: gilded frame with a silent loop; label hangs to the right */
-    .exhibit--film {
-      --fw: min(540px, 40vw, calc(44 * var(--vh) * 16 / 9));
-      --fh: calc(var(--fw) * 9 / 16 + 44px);
-      padding-top: calc(40 * var(--vh) - var(--fh) / 2);
-      margin-right: 236px;
-    }
-    .frame {
-      position: relative;
-      z-index: 1;
+    .tablet__rule {
       display: block;
-      padding: 22px;
+      height: 22px;
+      margin: calc(2.6 * var(--vh)) auto 0;
+      width: min(400px, 72%);
+      background: var(--meander-carved) 50% 50% / auto 100% repeat-x;
+      filter: drop-shadow(0 1px 0 rgba(232, 248, 242, .5));
+    }
+    .tablet__hint {
+      margin: calc(2.2 * var(--vh)) 0 0;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: rgba(42, 70, 70, .78);
+    }
+    .carved { text-shadow: 0 1px 0 rgba(232, 248, 242, .5), 0 -1px 0 rgba(0, 20, 20, .2); }
+
+    /* ---------- Wing steles ---------- */
+    .stele {
+      position: relative;
+      z-index: 2;
+      flex: none;
+      align-self: flex-end;
+      width: clamp(260px, 25vw, 340px);
+      margin-bottom: calc(100 * var(--vh) - var(--floor) - 3.5 * var(--vh));
+      filter: drop-shadow(0 22px 30px rgba(0, 12, 18, .5));
+    }
+    .stele__stone {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: calc(var(--floor) - 21 * var(--vh));
+      padding: calc(9 * var(--vh)) clamp(20px, 2.4vw, 32px) 24px;
+      text-align: center;
+      color: var(--carve);
+      clip-path: polygon(0 calc(5 * var(--vh)), 50% 0, 100% calc(5 * var(--vh)), 100% 100%, 0 100%);
+      background:
+        linear-gradient(180deg, rgba(0, 0, 0, 0) calc(5 * var(--vh)), rgba(40, 70, 70, .35) calc(5 * var(--vh)), rgba(40, 70, 70, .35) calc(5 * var(--vh) + 1px), rgba(255, 255, 255, .3) calc(5 * var(--vh) + 1px), rgba(0, 0, 0, 0) calc(5 * var(--vh) + 3px)),
+        var(--grain),
+        linear-gradient(180deg, #c8dcd5, #9ab8b2 55%, #7f9f9a);
+    }
+    .stele__numeral { margin: 0; font-size: calc(6 * var(--vh)); font-weight: 600; line-height: 1; letter-spacing: .08em; }
+    .stele__kicker { margin: calc(1.6 * var(--vh)) 0 0; font-size: 11px; font-weight: 600; letter-spacing: .32em; text-transform: uppercase; opacity: .85; }
+    .stele h2 { margin: calc(1.2 * var(--vh)) 0 0; font-size: clamp(22px, 2.3vw, 31px); font-weight: 600; line-height: 1.15; overflow-wrap: break-word; max-width: 100%; }
+    .stele__rule { width: 48px; height: 1px; margin: calc(2.2 * var(--vh)) 0; background: rgba(42, 70, 70, .5); box-shadow: 0 1px 0 rgba(255, 255, 255, .45); }
+    .stele p:last-child { margin: 0; font-size: clamp(14px, 1.15vw, 16px); line-height: 1.6; }
+
+    /* ---------- Exhibits ---------- */
+    .exhibit { position: relative; flex: none; }
+
+    /* film: bronze frame hung on chains, label on a stone stand */
+    .exhibit--film {
+      --fw: min(520px, 38vw, calc(46 * var(--vh) * 16 / 9));
+      --fh: calc(var(--fw) * 9 / 16 + 24px);
+      --mid: calc(44 * var(--vh));
+      width: calc(var(--fw) + 24px);
+      margin-right: 250px;
+    }
+    .chain {
+      position: absolute;
+      z-index: 1;
+      top: var(--beam);
+      width: 3px;
+      height: calc(var(--mid) - var(--fh) / 2 - var(--beam));
+      background: repeating-linear-gradient(180deg, var(--bronze-hi) 0 5px, rgba(0, 0, 0, 0) 5px 8px);
+    }
+    .chain:nth-of-type(1) { left: 20%; }
+    .chain:nth-of-type(2) { right: 20%; }
+    .frame {
+      position: absolute;
+      z-index: 2;
+      left: 0;
+      top: calc(var(--mid) - var(--fh) / 2);
+      display: block;
+      padding: 12px;
       border: 0;
-      border-radius: 4px;
       cursor: pointer;
-      background: linear-gradient(135deg, #f3d98d 0%, #b8862f 18%, #e9c66f 35%, #8f6420 52%, #e4c46e 70%, #a77a2b 86%, #f0d488 100%);
+      background:
+        radial-gradient(circle at 0 100%, rgba(98, 164, 144, .6), rgba(98, 164, 144, 0) 34%),
+        radial-gradient(circle at 100% 0, rgba(98, 164, 144, .5), rgba(98, 164, 144, 0) 30%),
+        linear-gradient(145deg, #dcc188 0%, #8d6f43 32%, #c6a66d 55%, #5e4729 100%);
       box-shadow:
-        inset 0 0 0 2px rgba(255, 240, 200, .55),
-        inset 0 0 0 7px rgba(110, 76, 22, .5),
-        inset 0 0 0 9px rgba(255, 236, 180, .45),
-        inset 0 0 0 17px rgba(0, 0, 0, .16),
-        0 24px 36px rgba(0, 0, 0, .5), 0 3px 6px rgba(0, 0, 0, .35);
-      transition: translate .4s var(--spring);
+        inset 0 0 0 1px rgba(255, 238, 196, .45),
+        inset 0 0 0 4px rgba(60, 44, 22, .35),
+        inset 0 0 0 5px rgba(255, 238, 196, .2),
+        0 26px 44px rgba(0, 12, 18, .6);
+      transition: translate .5s cubic-bezier(.2, .8, .2, 1);
     }
     .frame video {
       display: block;
@@ -302,112 +392,120 @@
       aspect-ratio: 16 / 9;
       object-fit: cover;
       background: #000;
-      box-shadow: 0 0 0 3px #1a120a;
+      box-shadow: 0 0 0 2px #1d160c;
     }
     .frame__play {
       position: absolute;
-      inset: 22px;
+      inset: 12px;
       display: grid;
       place-items: center;
-      background: rgba(0, 0, 0, .28);
+      background: rgba(2, 16, 22, .3);
       opacity: 0;
-      transition: opacity .25s ease;
+      transition: opacity .3s ease;
     }
     .frame__play span {
       display: grid;
       place-items: center;
-      width: 66px;
-      height: 66px;
+      width: 64px;
+      height: 64px;
+      border: 1.5px solid rgba(236, 227, 200, .9);
       border-radius: 50%;
-      background: rgba(255, 252, 243, .94);
-      color: var(--ink-dark);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, .35);
-      transition: scale .35s var(--spring);
+      color: var(--sand);
+      background: rgba(2, 16, 22, .35);
     }
-    .frame__play svg { width: 22px; height: 22px; margin-left: 4px; }
-    .frame:hover, .frame:focus-visible { translate: 0 -5px; }
+    .frame__play svg { width: 20px; height: 20px; margin-left: 3px; }
+    .frame:hover, .frame:focus-visible { translate: 0 -4px; }
     .frame:hover .frame__play, .frame:focus-visible .frame__play { opacity: 1; }
-    .frame:hover .frame__play span { scale: 1.08; }
-    .frame:focus-visible { outline: 3px solid var(--coral); outline-offset: 4px; }
+    .frame:focus-visible { outline: 2px solid var(--sand); outline-offset: 6px; }
 
-    /* wall label */
-    .plaque {
+    /* engraved bronze label */
+    .label {
       position: relative;
-      z-index: 1;
-      background: #f7f1e3;
-      color: #2b2119;
-      padding: 14px 16px 16px;
-      border-radius: 2px;
-      box-shadow: 0 8px 18px rgba(0, 0, 0, .35);
-      font-size: 13.5px;
-      line-height: 1.4;
+      z-index: 2;
+      padding: 16px 18px 17px;
+      color: #f2e5c4;
+      background:
+        var(--grain),
+        radial-gradient(circle at 100% 100%, rgba(98, 164, 144, .45), rgba(98, 164, 144, 0) 40%),
+        linear-gradient(160deg, #8a7049, #5a4529 55%, #45351f);
+      box-shadow: inset 0 0 0 1px rgba(255, 236, 190, .28), inset 0 1px 0 rgba(255, 240, 205, .35), 0 14px 24px rgba(0, 12, 18, .45);
+      font-size: 14px;
+      line-height: 1.45;
     }
-    .exhibit--film .plaque {
-      position: absolute;
-      left: calc(100% + 30px);
-      top: calc(40 * var(--vh) + var(--fh) / 2);
-      translate: 0 -100%;
-      width: 206px;
-    }
-    .plaque h3 { margin: 0 0 4px; font-size: 20px; font-weight: 500; font-style: italic; line-height: 1.15; }
-    .plaque__meta { margin: 0; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #8c7b62; }
-    .plaque__role { margin: 10px 0 0; }
-    .plaque__credit { margin: 2px 0 0; color: #6b5c48; font-style: italic; }
-    .stats { display: flex; flex-wrap: wrap; justify-content: center; gap: 2px 12px; margin: 6px 0 0; padding: 0; list-style: none; font-size: 13px; color: #5a4a36; }
-    .stats b { font-weight: 500; color: #1d1610; }
-    .plaque__cta {
+    .label h3 { margin: 0; font-size: 18px; font-weight: 600; line-height: 1.2; letter-spacing: .01em; }
+    .label__meta { margin: 4px 0 0; font-size: 10.5px; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: rgba(242, 229, 196, .62); }
+    .label__role { margin: 12px 0 0; }
+    .label__credit { margin: 1px 0 0; color: rgba(242, 229, 196, .72); }
+    .label__cta {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      margin-top: 12px;
-      padding: 6px 13px 7px;
+      gap: 8px;
+      margin-top: 14px;
+      padding: 0 0 3px;
       border: 0;
-      border-radius: 999px;
-      background: var(--coral);
-      color: #fff;
-      font-size: 13.5px;
-      line-height: 1.1;
+      border-bottom: 1px solid rgba(242, 229, 196, .45);
+      background: none;
+      color: #f2e5c4;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: .2em;
+      text-transform: uppercase;
       text-decoration: none;
       cursor: pointer;
-      box-shadow: 0 3px 0 #c9452d;
-      transition: scale .3s var(--spring), translate .15s ease, box-shadow .15s ease;
+      transition: border-color .2s ease, gap .3s ease;
     }
-    .plaque__cta:hover { scale: 1.05; }
-    .plaque__cta:active { translate: 0 2px; box-shadow: 0 1px 0 #c9452d; }
-    .plaque__cta:focus-visible { outline: 3px solid var(--ink-dark); outline-offset: 2px; }
-    .plaque__cta svg { width: 11px; height: 11px; }
+    .label__cta:hover, .label__cta:focus-visible { border-color: #f2e5c4; gap: 11px; outline: none; }
+    .label__cta svg { width: 10px; height: 10px; }
+    .exhibit--film .label {
+      position: absolute;
+      left: calc(100% + 34px);
+      top: calc(var(--mid) + var(--fh) / 2);
+      translate: 0 -100%;
+      width: 214px;
+    }
+    /* the stone stand under the label */
+    .exhibit--film .label::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      left: 50%;
+      top: 100%;
+      width: 30px;
+      height: calc(var(--floor) + 2.4 * var(--vh) - var(--mid) - var(--fh) / 2);
+      translate: -50% 0;
+      background: var(--grain), linear-gradient(90deg, #5d807b, #b2cbc4 40%, #8eaea8 65%, #557874);
+      box-shadow: 0 0 0 0 transparent, 0 calc(1.4 * var(--vh)) 0 -6px rgba(0, 0, 0, .25);
+    }
 
-    /* social: a phone standing on a pedestal, label on the pedestal */
+    /* social: device on a marble plinth */
     .exhibit--phone {
-      --ph: min(560px, calc(52 * var(--vh)));
+      --ph: min(500px, calc(44 * var(--vh)));
       --pw: calc(var(--ph) * .49);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-end;
-      width: calc(var(--pw) + 90px);
-      padding-bottom: calc(100 * var(--vh) - var(--floor) - 7 * var(--vh));
+      width: calc(var(--pw) + 76px);
+      padding-bottom: calc(100 * var(--vh) - var(--floor) - 4.6 * var(--vh));
     }
     .phone {
       position: relative;
-      z-index: 1;
+      z-index: 2;
       width: var(--pw);
       height: var(--ph);
-      padding: 9px;
+      padding: 8px;
       border-radius: calc(var(--pw) * .17);
-      background: linear-gradient(145deg, #333336, #0f0f10 60%);
-      box-shadow: inset 0 0 0 1.5px #55555a, 0 22px 34px rgba(0, 0, 0, .5);
-      transition: translate .4s var(--spring);
+      background: linear-gradient(145deg, #2f3436, #0c0f10 60%);
+      box-shadow: inset 0 0 0 1.5px #4d5558, 0 24px 40px rgba(0, 12, 18, .55);
     }
-    .phone:hover { translate: 0 -5px; }
     .phone::before {
       content: "";
       position: absolute;
-      z-index: 2;
-      top: 16px;
+      z-index: 3;
+      top: 15px;
       left: 50%;
       width: 30%;
-      height: 13px;
+      height: 12px;
       translate: -50% 0;
       border-radius: 10px;
       background: #000;
@@ -430,168 +528,213 @@
       border: 0;
       transform-origin: 0 0;
     }
-    .pedestal {
+    /* catches swipes and wheel so the hall keeps moving; steps aside once you settle on the phone */
+    .phone__glass { position: absolute; z-index: 2; inset: 0; cursor: pointer; }
+    .phone.is-live .phone__glass { pointer-events: none; }
+    .plinth {
       position: relative;
-      z-index: 1;
-      width: calc(var(--pw) + 80px);
-      margin-top: 10px;
-      padding: 16px 14px 20px;
-      text-align: center;
-      background: linear-gradient(180deg, #f6f1e6, #e1d7c2);
-      box-shadow: inset 0 6px 0 #fffaf0, inset 0 -10px 18px rgba(0, 0, 0, .08), 0 14px 22px rgba(0, 0, 0, .4);
+      z-index: 2;
+      width: calc(var(--pw) + 76px);
+      margin-top: calc(1.4 * var(--vh));
+      padding: calc(2.2 * var(--vh)) 14px calc(2.4 * var(--vh));
+      background:
+        var(--grain),
+        repeating-linear-gradient(90deg, rgba(255, 255, 255, .07) 0 9px, rgba(0, 0, 0, .08) 9px 11px),
+        linear-gradient(90deg, #5f827d, #bdd3cc 34%, #a3bfb9 62%, #587b77);
+      box-shadow: 0 18px 30px rgba(0, 12, 18, .5);
     }
-    .pedestal::before {
+    .plinth::before {
       content: "";
       position: absolute;
-      left: -8px;
-      right: -8px;
-      top: -10px;
-      height: 12px;
-      background: linear-gradient(180deg, #fffaf0, #e9e0cd);
-      box-shadow: 0 3px 6px rgba(0, 0, 0, .2);
+      left: -10px;
+      right: -10px;
+      bottom: 100%;
+      height: calc(1.4 * var(--vh));
+      background: var(--grain), linear-gradient(180deg, #d0e2dc, #94b3ad);
     }
-    .pedestal .plaque { background: none; box-shadow: none; padding: 0; }
-    .pedestal .plaque h3 { font-size: 18px; }
+    .plinth .label { padding: 13px 14px 14px; text-align: center; }
+    .plinth .label h3 { font-size: 16px; }
+    .stats { display: flex; justify-content: center; gap: 16px; margin: 10px 0 0; padding: 0; list-style: none; }
+    .stats li { display: flex; flex-direction: column; align-items: center; }
+    .stats b { font-size: 17px; font-weight: 600; line-height: 1.1; }
+    .stats span { margin-top: 2px; font-size: 9.5px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: rgba(242, 229, 196, .62); }
 
     /* ---------- Exit ---------- */
-    .room--exit { width: max(70vw, 520px); justify-content: center; }
     .exit {
       position: relative;
+      z-index: 2;
+      flex: none;
       align-self: flex-end;
       display: flex;
       flex-direction: column;
       align-items: center;
+      width: max(46vw, 360px);
       margin-bottom: calc(100 * var(--vh) - var(--floor));
       text-decoration: none;
-      scroll-snap-align: center;
     }
-    .exit__sign {
-      margin-bottom: 18px;
-      padding: 5px 14px 6px;
-      border-radius: 4px;
-      background: #1f8a4c;
-      color: #eafff1;
-      font-size: 15px;
-      letter-spacing: .3em;
-      text-transform: uppercase;
-      box-shadow: 0 0 18px rgba(64, 220, 130, .55), inset 0 0 0 2px rgba(255, 255, 255, .25);
-    }
-    .exit__door {
+    .exit__arch {
       position: relative;
-      width: clamp(150px, 16vw, 210px);
-      height: calc(44 * var(--vh));
+      width: clamp(190px, 18vw, 260px);
+      height: calc(var(--floor) - 21 * var(--vh));
+      border: calc(3.2 * var(--vh)) solid #8eaea8;
+      border-bottom: 0;
       border-radius: 999px 999px 0 0;
-      background: radial-gradient(ellipse at 50% 100%, #9fd8ef 0%, #3c8fb8 45%, #0d4a6e 100%);
-      box-shadow: 0 0 0 12px #c9a457, 0 0 0 16px #8a6a2c, inset 0 20px 40px rgba(0, 0, 0, .35);
-      overflow: hidden;
-      transition: filter .3s ease;
+      background: linear-gradient(180deg, rgba(210, 250, 246, .55), rgba(140, 220, 226, .2) 55%, rgba(140, 220, 226, .04));
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .2), 0 24px 44px rgba(0, 12, 18, .5);
+      transition: filter .4s ease;
     }
-    .exit__door::after {
+    .exit__arch::before {
       content: "";
       position: absolute;
-      inset: auto 0 0;
-      height: 30%;
-      background: repeating-linear-gradient(90deg, rgba(255, 255, 255, .25) 0 2px, transparent 2px 22px);
-      mask: linear-gradient(transparent, #000);
-      -webkit-mask: linear-gradient(transparent, #000);
+      inset: calc(-3.2 * var(--vh)) calc(-3.2 * var(--vh)) 0;
+      border-radius: 999px 999px 0 0;
+      background: var(--grain);
+      -webkit-mask: radial-gradient(farthest-side at 50% 100%, transparent calc(100% - 3.2 * var(--vh)), #000 calc(100% - 3.2 * var(--vh)));
+      mask: radial-gradient(farthest-side at 50% 100%, transparent calc(100% - 3.2 * var(--vh)), #000 calc(100% - 3.2 * var(--vh)));
+      pointer-events: none;
     }
+    .exit__arch i {
+      position: absolute;
+      bottom: 0;
+      left: var(--x);
+      width: var(--s);
+      aspect-ratio: 1;
+      border: 1px solid rgba(255, 255, 255, .7);
+      border-radius: 50%;
+      opacity: 0;
+      animation: rise var(--d) ease-in var(--delay) infinite;
+    }
+    @keyframes rise { 10% { opacity: .9; } 90% { opacity: .7; } to { opacity: 0; translate: 0 calc(-1 * (var(--floor) - 26 * var(--vh))); } }
     .exit__label {
       position: absolute;
-      bottom: calc(-1 * (100 * var(--vh) - var(--floor)) + 34px);
+      top: calc(-1 * 2 * var(--vh));
+      left: 50%;
+      translate: -50% -100%;
       white-space: nowrap;
-      padding: 7px 14px 8px;
-      border-radius: 999px;
-      background: var(--paper);
-      font-size: 15px;
-      font-style: italic;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, .3);
+      padding: 9px 16px 10px;
+      color: #f2e5c4;
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: .26em;
+      text-transform: uppercase;
+      background: var(--grain), linear-gradient(160deg, #8a7049, #5a4529 55%, #45351f);
+      box-shadow: inset 0 0 0 1px rgba(255, 236, 190, .28), 0 10px 20px rgba(0, 12, 18, .4);
     }
-    .exit:hover .exit__door { filter: brightness(1.15); }
-    .exit:focus-visible .exit__door { outline: 3px solid var(--coral); outline-offset: 20px; }
+    .exit:hover .exit__arch, .exit:focus-visible .exit__arch { filter: brightness(1.18); }
+    .exit:focus-visible { outline: none; }
+
+    /* caustic light rippling over the floor */
+    .caustics {
+      position: fixed;
+      z-index: 2;
+      left: 0;
+      right: 0;
+      top: var(--floor);
+      bottom: 0;
+      overflow: hidden;
+      pointer-events: none;
+      mix-blend-mode: soft-light;
+    }
+    .caustics__move { position: absolute; inset: 0; will-change: transform; }
+    .caustics i {
+      position: absolute;
+      inset: -720px;
+      background: url(assets/museum/caustics.png) 0 0 / 512px 512px;
+      animation: drift-a 46s linear infinite;
+    }
+    .caustics i + i { background-size: 720px 720px; opacity: .75; animation: drift-b 61s linear infinite; }
+    @keyframes drift-a { to { translate: 512px 512px; } }
+    @keyframes drift-b { to { translate: -720px 720px; } }
 
     /* ---------- Fixed controls ---------- */
-    .chip, .sound, .walk {
+    .back {
       position: fixed;
       z-index: 20;
-      border: 0;
-      background: rgba(255, 252, 243, .93);
-      color: var(--ink-dark);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, .3);
-      cursor: pointer;
-      transition: scale .3s var(--spring), opacity .25s ease;
-    }
-    .chip {
-      top: max(16px, env(safe-area-inset-top));
-      left: max(16px, env(safe-area-inset-left));
+      top: calc(var(--beam) + 14px);
+      left: max(20px, env(safe-area-inset-left));
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      height: 40px;
-      padding: 0 16px 1px 13px;
-      border-radius: 999px;
-      font-size: 15px;
-      font-style: italic;
+      gap: 9px;
+      padding: 6px 0;
+      color: var(--sand);
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: .26em;
+      text-transform: uppercase;
       text-decoration: none;
+      text-shadow: 0 1px 8px rgba(0, 10, 14, .6);
     }
-    .chip svg { width: 15px; height: 15px; }
+    .back svg { width: 14px; height: 14px; transition: translate .3s ease; }
+    .back:hover svg { translate: -3px 0; }
+    .back:focus-visible { outline: 1px solid var(--sand); outline-offset: 4px; }
     .sound {
-      top: max(16px, env(safe-area-inset-top));
+      position: fixed;
+      z-index: 20;
+      top: calc(var(--beam) + 10px);
       right: max(16px, env(safe-area-inset-right));
       width: 40px;
       height: 40px;
       display: grid;
       place-items: center;
       padding: 0;
+      border: 1px solid rgba(236, 227, 200, .4);
       border-radius: 50%;
+      background: rgba(3, 24, 34, .45);
+      color: var(--sand);
+      cursor: pointer;
+      transition: border-color .2s ease;
     }
-    .sound svg { width: 20px; height: 20px; }
+    .sound:hover { border-color: var(--sand); }
+    .sound:focus-visible { outline: 1px solid var(--sand); outline-offset: 3px; }
+    .sound svg { width: 18px; height: 18px; }
     .sound .waves, .sound .mute { transition: opacity .2s ease; }
     .sound .mute { opacity: 0; }
     .sound[aria-pressed="false"] .waves { opacity: 0; }
     .sound[aria-pressed="false"] .mute { opacity: 1; }
-    .walk {
-      bottom: max(18px, env(safe-area-inset-bottom));
-      width: 50px;
-      height: 50px;
+
+    .nav {
+      position: fixed;
+      z-index: 20;
+      left: 50%;
+      bottom: max(16px, env(safe-area-inset-bottom));
+      translate: -50% 0;
+      display: flex;
+      align-items: center;
+      height: 46px;
+      border: 1px solid rgba(236, 227, 200, .32);
+      background: rgba(3, 22, 31, .72);
+      box-shadow: 0 10px 30px rgba(0, 8, 12, .4);
+    }
+    .nav button {
       display: grid;
       place-items: center;
+      width: 46px;
+      height: 44px;
       padding: 0;
-      border-radius: 50%;
+      border: 0;
+      background: none;
+      color: var(--sand);
+      cursor: pointer;
+      transition: opacity .2s ease, background-color .2s ease;
     }
-    .walk svg { width: 20px; height: 20px; }
-    .walk--prev { left: max(16px, env(safe-area-inset-left)); }
-    .walk--next { right: max(16px, env(safe-area-inset-right)); }
-    .walk[disabled] { opacity: 0; pointer-events: none; }
-    .chip:hover, .sound:hover, .walk:hover { scale: 1.08; }
-    .chip:focus-visible, .sound:focus-visible, .walk:focus-visible { outline: 3px solid var(--coral); outline-offset: 2px; }
-
-    /* you, walking the hall */
-    .avatar {
-      position: fixed;
-      z-index: 15;
-      left: clamp(84px, 10vw, 150px);
-      top: calc(var(--floor) + 8.5 * var(--vh));
-      width: clamp(48px, 5.2vw, 72px);
-      pointer-events: none;
-    }
-    .avatar img { display: block; width: 100%; filter: drop-shadow(0 5px 5px rgba(0, 0, 0, .35)); animation: idle 2.6s ease-in-out infinite; }
-    .avatar::after {
-      content: "";
-      position: absolute;
-      left: 12%;
-      right: 12%;
-      bottom: -6px;
-      height: 9px;
-      border-radius: 50%;
-      background: rgba(0, 0, 0, .3);
-      filter: blur(2px);
-    }
-    .avatar.is-walking img { animation: walk .34s ease-in-out infinite; }
-    .avatar.is-left img { scale: -1 1; }
-    @keyframes idle { 50% { translate: 0 -4px; } }
-    @keyframes walk {
-      0%, 100% { translate: 0 0; rotate: -5deg; }
-      50%      { translate: 0 -10px; rotate: 5deg; }
+    .nav button:hover { background: rgba(236, 227, 200, .08); }
+    .nav button:focus-visible { outline: 1px solid var(--sand); outline-offset: -4px; }
+    .nav button[disabled] { opacity: .25; cursor: default; background: none; }
+    .nav svg { width: 16px; height: 16px; }
+    .nav__label {
+      min-width: clamp(170px, 22vw, 250px);
+      padding: 0 6px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      border-left: 1px solid rgba(236, 227, 200, .16);
+      border-right: 1px solid rgba(236, 227, 200, .16);
+      line-height: 44px;
     }
 
     /* ---------- Theater ---------- */
@@ -603,274 +746,292 @@
       border: 0;
       background: transparent;
       overflow: visible;
-      color: var(--paper);
+      color: var(--sand);
     }
-    .theater::backdrop { background: rgba(10, 6, 4, .9); }
-    .theater[open] { animation: theater-in .45s var(--spring); }
-    @keyframes theater-in { from { opacity: 0; scale: .92; } }
+    .theater::backdrop { background: rgba(2, 14, 20, .94); }
+    .theater[open] { animation: theater-in .5s cubic-bezier(.2, .8, .2, 1); }
+    @keyframes theater-in { from { opacity: 0; translate: 0 18px; } }
     .stage {
-      position: relative;
       aspect-ratio: 16 / 9;
-      max-height: calc(80 * var(--vh));
+      max-height: calc(78 * var(--vh));
       margin: 0 auto;
-      overflow: hidden;
-      border-radius: 6px;
       background: #000;
-      box-shadow: 0 30px 80px rgba(0, 0, 0, .6);
+      box-shadow: 0 0 0 1px rgba(212, 180, 122, .55), 0 40px 90px rgba(0, 0, 0, .6);
     }
     .stage video { display: block; width: 100%; height: 100%; background: #000; }
-    .curtain {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 51%;
-      pointer-events: none;
-      background:
-        linear-gradient(180deg, rgba(0, 0, 0, .25), rgba(0, 0, 0, 0) 20%, rgba(0, 0, 0, .35)),
-        repeating-linear-gradient(90deg, #6d0d17 0 14px, #9c1a28 14px 26px, #7d1220 26px 38px);
-    }
-    .curtain--l { left: 0; }
-    .curtain--r { right: 0; }
-    .theater[open] .curtain--l { animation: part-l 1.1s cubic-bezier(.6, 0, .2, 1) .2s forwards; }
-    .theater[open] .curtain--r { animation: part-r 1.1s cubic-bezier(.6, 0, .2, 1) .2s forwards; }
-    @keyframes part-l { to { translate: -100% 0; } }
-    @keyframes part-r { to { translate: 100% 0; } }
-    .theater__caption { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 18px; margin-top: 14px; }
-    .theater__title { margin: 0; font-size: clamp(20px, 2.4vw, 28px); font-weight: 500; font-style: italic; }
-    .theater__meta { margin: 0; font-size: 14px; color: rgba(255, 252, 243, .72); }
+    .theater__caption { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; margin-top: 16px; }
+    .theater__title { margin: 0; font-size: clamp(14px, 1.5vw, 17px); font-weight: 600; letter-spacing: .22em; text-transform: uppercase; }
+    .theater__meta { margin: 0; font-size: 14px; color: var(--sand-dim); }
     .theater__close {
       position: absolute;
-      top: -20px;
-      right: -20px;
-      z-index: 2;
-      width: 42px;
-      height: 42px;
-      display: grid;
-      place-items: center;
-      padding: 0;
+      right: 0;
+      bottom: calc(100% + 12px);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
       border: 0;
-      border-radius: 50%;
-      background: var(--paper);
-      color: var(--ink-dark);
-      box-shadow: 0 4px 14px rgba(0, 0, 0, .4);
+      background: none;
+      color: var(--sand);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .24em;
+      text-transform: uppercase;
       cursor: pointer;
-      transition: scale .3s var(--spring);
     }
-    .theater__close:hover { scale: 1.08; }
-    .theater__close svg { width: 16px; height: 16px; }
+    .theater__close svg { width: 12px; height: 12px; }
+    .theater__close:focus-visible { outline: 1px solid var(--sand); outline-offset: 4px; }
 
     /* ---------- Small screens ---------- */
     @media (max-width: 700px) {
-      .room { gap: 56px; padding: 0 64px; }
+      .track { gap: 26px; }
       .exhibit--film {
-        --fw: min(76vw, calc(40 * var(--vh) * 16 / 9));
-        padding-top: calc(15 * var(--vh));
+        --fw: min(78vw, calc(40 * var(--vh) * 16 / 9));
+        --mid: calc(32 * var(--vh));
         margin-right: 0;
-        width: calc(var(--fw) + 44px);
       }
-      .exhibit--film .plaque {
-        position: relative;
-        left: auto;
-        top: auto;
-        translate: none;
+      .exhibit--film .label {
+        left: 0;
+        right: 0;
         width: auto;
-        margin-top: 22px;
+        top: calc(var(--mid) + var(--fh) / 2 + 5 * var(--vh));
+        translate: none;
       }
-      .exhibit--phone { --ph: min(480px, calc(48 * var(--vh)), 120vw); }
-      .wing-panel { width: min(300px, 78vw); }
-      .theater__close { top: -54px; right: 0; }
+      .exhibit--film .label::after { height: calc(var(--floor) + 2.4 * var(--vh) - var(--mid) - var(--fh) / 2 - 5 * var(--vh) - 100%); }
+      .exhibit--phone { --ph: min(440px, calc(42 * var(--vh)), 110vw); }
+      .stele { width: min(300px, 80vw); }
+      .nav__label { min-width: 150px; font-size: 10px; letter-spacing: .18em; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      body::after, .beam, .lamp::after { transition: none; }
-      .avatar img, .avatar.is-walking img { animation: none; }
-      .theater[open], .theater[open] .curtain--l, .theater[open] .curtain--r { animation: none; }
-      .curtain { display: none; }
-      .frame, .phone { transition: none; }
+      body::after { transition: none; }
+      .ray, .fish, .fish svg, .kelp, .caustics i, .exit__arch i { animation: none; }
+      .theater[open] { animation: none; }
+      .frame { transition: none; }
     }
   </style>
 </head>
 <body>
-  <a class="chip" href="index.html#menu">
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg>
-    Reef
+  <div class="sea" aria-hidden="true">
+    <span class="ray" style="--x:8%; --w:9vw; --r:14deg; --d:9s"></span>
+    <span class="ray" style="--x:30%; --w:14vw; --r:9deg; --d:12s"></span>
+    <span class="ray" style="--x:55%; --w:7vw; --r:12deg; --d:8s"></span>
+    <span class="ray" style="--x:74%; --w:12vw; --r:7deg; --d:11s"></span>
+    <div class="ruins"></div>
+    <span class="fish" style="--y:22%; --s:44px; --d:58s; --delay:-12s"><svg viewBox="0 0 54 20"><path fill="currentColor" d="M2 10C10 1 28 0 40 10C28 20 10 19 2 10ZM40 10L53 2L50 10L53 18Z"/></svg></span>
+    <span class="fish fish--back" style="--y:31%; --s:30px; --d:72s; --delay:-40s"><svg viewBox="0 0 54 20"><path fill="currentColor" d="M2 10C10 1 28 0 40 10C28 20 10 19 2 10ZM40 10L53 2L50 10L53 18Z"/></svg></span>
+    <span class="fish" style="--y:56%; --s:22px; --d:64s; --delay:-25s"><svg viewBox="0 0 54 20"><path fill="currentColor" d="M2 10C10 1 28 0 40 10C28 20 10 19 2 10ZM40 10L53 2L50 10L53 18Z"/></svg></span>
+    <canvas class="snow"></canvas>
+  </div>
+
+  <main class="hall" tabindex="-1">
+    <div class="track">
+      <section class="lobby" aria-label="Entrance" data-stop data-label="Entrance">
+        <span class="column" style="position:absolute; left:6vw" aria-hidden="true"><span class="column__cap"></span><span class="column__shaft"></span><span class="column__base"></span></span>
+        <span class="column" style="position:absolute; right:6vw" aria-hidden="true"><span class="column__cap"></span><span class="column__shaft"></span><span class="column__base"></span></span>
+        <div class="tablet">
+          <h1 class="carved">Film &amp; Media</h1>
+          <span class="tablet__rule" aria-hidden="true"></span>
+          <p class="tablet__hint carved">Scroll to enter</p>
+        </div>
+        <span class="kelp" style="left:calc(6vw - 34px); --h:calc(30 * var(--vh)); --d:6s" aria-hidden="true"><svg viewBox="0 0 60 300"><path fill="currentColor" d="M30 300C22 240 40 200 28 150C18 110 34 70 26 20C25 10 30 2 33 0C38 40 26 80 36 130C46 180 30 230 38 300Z"/><path fill="currentColor" opacity=".75" d="M14 300C10 260 22 230 14 190C8 160 18 140 12 110C20 140 14 170 22 200C30 240 20 270 24 300Z"/></svg></span>
+        <span class="kelp" style="right:calc(6vw - 40px); --h:calc(38 * var(--vh)); --d:8s" aria-hidden="true"><svg viewBox="0 0 60 300"><path fill="currentColor" d="M30 300C22 240 40 200 28 150C18 110 34 70 26 20C25 10 30 2 33 0C38 40 26 80 36 130C46 180 30 230 38 300Z"/><path fill="currentColor" opacity=".75" d="M44 300C48 250 36 220 44 180C50 150 40 120 46 90C38 120 42 150 36 190C30 230 40 270 36 300Z"/></svg></span>
+      </section>
+
+      <!-- Wing I -->
+      <section class="stele" aria-labelledby="wing-films" data-stop data-label="I &middot; Script to Screen">
+        <div class="stele__stone carved">
+          <p class="stele__numeral" aria-hidden="true">I</p>
+          <p class="stele__kicker">Short films</p>
+          <h2 id="wing-films">Script to Screen</h2>
+          <span class="stele__rule" aria-hidden="true"></span>
+          <p>Stanford Arts Intensive &mdash; <em>Narrative Filmmaking: Script to Screen</em>, under Adam Tobin.</p>
+        </div>
+      </section>
+
+      <article class="exhibit exhibit--film" data-stop data-label="I &middot; Script to Screen">
+        <span class="shaft" aria-hidden="true"></span>
+        <span class="chain" aria-hidden="true"></span><span class="chain" aria-hidden="true"></span>
+        <button class="frame" type="button" data-film="gnomans-land" aria-label="Watch Gnoman’s Land">
+          <video muted loop playsinline preload="none" poster="assets/film/poster-gnomans-land.jpg" data-src="assets/film/loop-gnomans-land.mp4"></video>
+          <span class="frame__play" aria-hidden="true"><span><svg viewBox="0 0 20 20"><path d="M4 2.5l13 7.5-13 7.5z" fill="currentColor"/></svg></span></span>
+        </button>
+        <div class="label">
+          <h3>Gnoman&rsquo;s Land</h3>
+          <p class="label__meta">2026 &middot; Short &middot; 3:01</p>
+          <p class="label__role">Co-writer &amp; co-director</p>
+          <p class="label__credit">with Lillian Whelan</p>
+          <button class="label__cta" type="button" data-film="gnomans-land">Watch film
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 2.5l13 7.5-13 7.5z" fill="currentColor"/></svg></button>
+        </div>
+      </article>
+
+      <span class="column" aria-hidden="true"><span class="column__cap"></span><span class="column__shaft"></span><span class="column__base"></span></span>
+
+      <article class="exhibit exhibit--film" data-stop data-label="I &middot; Script to Screen">
+        <span class="shaft" aria-hidden="true"></span>
+        <span class="chain" aria-hidden="true"></span><span class="chain" aria-hidden="true"></span>
+        <button class="frame" type="button" data-film="the-great-mystery" aria-label="Watch The Great Mystery">
+          <video muted loop playsinline preload="none" poster="assets/film/poster-the-great-mystery.jpg" data-src="assets/film/loop-the-great-mystery.mp4"></video>
+          <span class="frame__play" aria-hidden="true"><span><svg viewBox="0 0 20 20"><path d="M4 2.5l13 7.5-13 7.5z" fill="currentColor"/></svg></span></span>
+        </button>
+        <div class="label">
+          <h3>The Great Mystery</h3>
+          <p class="label__meta">2026 &middot; Short &middot; 3:18</p>
+          <p class="label__role">Actor</p>
+          <button class="label__cta" type="button" data-film="the-great-mystery">Watch film
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 2.5l13 7.5-13 7.5z" fill="currentColor"/></svg></button>
+        </div>
+      </article>
+
+      <span class="column" aria-hidden="true"><span class="column__cap"></span><span class="column__shaft"></span><span class="column__base"></span></span>
+
+      <article class="exhibit exhibit--film" data-stop data-label="I &middot; Script to Screen">
+        <span class="shaft" aria-hidden="true"></span>
+        <span class="chain" aria-hidden="true"></span><span class="chain" aria-hidden="true"></span>
+        <button class="frame" type="button" data-film="unspeakable-horror" aria-label="Watch Unspeakable Horror">
+          <video muted loop playsinline preload="none" poster="assets/film/poster-unspeakable-horror.jpg" data-src="assets/film/loop-unspeakable-horror.mp4"></video>
+          <span class="frame__play" aria-hidden="true"><span><svg viewBox="0 0 20 20"><path d="M4 2.5l13 7.5-13 7.5z" fill="currentColor"/></svg></span></span>
+        </button>
+        <div class="label">
+          <h3>Unspeakable Horror</h3>
+          <p class="label__meta">2026 &middot; Short &middot; 2:40</p>
+          <p class="label__role">Actor</p>
+          <p class="label__credit">as Brody</p>
+          <button class="label__cta" type="button" data-film="unspeakable-horror">Watch film
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 2.5l13 7.5-13 7.5z" fill="currentColor"/></svg></button>
+        </div>
+      </article>
+
+      <span class="column column--broken" aria-hidden="true"><span class="column__cap"></span><span class="column__shaft"></span><span class="column__base"></span></span>
+
+      <!-- Wing II -->
+      <section class="stele" aria-labelledby="wing-ig" data-stop data-label="II &middot; @andrewjiohkang">
+        <div class="stele__stone carved">
+          <p class="stele__numeral" aria-hidden="true">II</p>
+          <p class="stele__kicker">Instagram</p>
+          <h2 id="wing-ig">@andrewjiohkang</h2>
+          <span class="stele__rule" aria-hidden="true"></span>
+          <p>Stanford Royale. Millions of views &mdash; my first real endeavor scaling a brand from zero.</p>
+        </div>
+      </section>
+
+      <article class="exhibit exhibit--phone" data-stop data-label="II &middot; @andrewjiohkang">
+        <span class="shaft" aria-hidden="true"></span>
+        <div class="phone" data-href="https://www.instagram.com/p/DR57Ao_Ebbi/"><div class="phone__screen">
+          <iframe data-src="https://www.instagram.com/p/DR57Ao_Ebbi/embed/captioned/" data-w="326" title="Instagram reel by @andrewjiohkang: Clash Royale League?" scrolling="no" allow="encrypted-media; picture-in-picture; fullscreen"></iframe>
+        </div><span class="phone__glass" aria-hidden="true"></span></div>
+        <div class="plinth"><div class="label">
+          <h3>Clash Royale League?</h3>
+          <ul class="stats"><li><b>1.4M</b><span>views</span></li><li><b>108K</b><span>likes</span></li><li><b>3,900</b><span>comments</span></li></ul>
+          <a class="label__cta" href="https://www.instagram.com/p/DR57Ao_Ebbi/" target="_blank" rel="noopener">Instagram
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 9l6-6M4 3h5v5"/></svg></a>
+        </div></div>
+      </article>
+
+      <span class="column" aria-hidden="true"><span class="column__cap"></span><span class="column__shaft"></span><span class="column__base"></span></span>
+
+      <article class="exhibit exhibit--phone" data-stop data-label="II &middot; @andrewjiohkang">
+        <span class="shaft" aria-hidden="true"></span>
+        <div class="phone" data-href="https://www.instagram.com/reel/DRI315djwKl/"><div class="phone__screen">
+          <iframe data-src="https://www.instagram.com/reel/DRI315djwKl/embed/captioned/" data-w="326" title="Instagram reel by @andrewjiohkang: start a Clash Royale club" scrolling="no" allow="encrypted-media; picture-in-picture; fullscreen"></iframe>
+        </div><span class="phone__glass" aria-hidden="true"></span></div>
+        <div class="plinth"><div class="label">
+          <h3>Start a Clash Royale club</h3>
+          <ul class="stats"><li><b>794K</b><span>views</span></li><li><b>52.7K</b><span>likes</span></li><li><b>58.8K</b><span>shares</span></li></ul>
+          <a class="label__cta" href="https://www.instagram.com/reel/DRI315djwKl/" target="_blank" rel="noopener">Instagram
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 9l6-6M4 3h5v5"/></svg></a>
+        </div></div>
+      </article>
+
+      <span class="column" aria-hidden="true"><span class="column__cap"></span><span class="column__shaft"></span><span class="column__base"></span></span>
+
+      <!-- Wing III -->
+      <section class="stele" aria-labelledby="wing-tt" data-stop data-label="III &middot; College with Gio">
+        <div class="stele__stone carved">
+          <p class="stele__numeral" aria-hidden="true">III</p>
+          <p class="stele__kicker">TikTok</p>
+          <h2 id="wing-tt">College with Gio</h2>
+          <span class="stele__rule" aria-hidden="true"></span>
+          <p>@collegewithgio &mdash; my first semi-viral moments on social media.</p>
+        </div>
+      </section>
+
+      <article class="exhibit exhibit--phone" data-stop data-label="III &middot; College with Gio">
+        <span class="shaft" aria-hidden="true"></span>
+        <div class="phone" data-href="https://www.tiktok.com/@collegewithgio/video/7532566227059887391"><div class="phone__screen phone__screen--dark">
+          <iframe data-src="https://www.tiktok.com/player/v1/7532566227059887391?music_info=0&amp;description=0&amp;rel=0" title="TikTok by @collegewithgio: college decisions" allow="encrypted-media; picture-in-picture; fullscreen"></iframe>
+        </div><span class="phone__glass" aria-hidden="true"></span></div>
+        <div class="plinth"><div class="label">
+          <h3>College decisions</h3>
+          <ul class="stats"><li><b>383.2K</b><span>views</span></li><li><b>64.2K</b><span>likes</span></li><li><b>4,500</b><span>shares</span></li></ul>
+          <a class="label__cta" href="https://www.tiktok.com/@collegewithgio/video/7532566227059887391" target="_blank" rel="noopener">TikTok
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 9l6-6M4 3h5v5"/></svg></a>
+        </div></div>
+      </article>
+
+      <span class="column" aria-hidden="true"><span class="column__cap"></span><span class="column__shaft"></span><span class="column__base"></span></span>
+
+      <article class="exhibit exhibit--phone" data-stop data-label="III &middot; College with Gio">
+        <span class="shaft" aria-hidden="true"></span>
+        <div class="phone" data-href="https://www.tiktok.com/@collegewithgio/video/7580235100886011149"><div class="phone__screen phone__screen--dark">
+          <iframe data-src="https://www.tiktok.com/player/v1/7580235100886011149?music_info=0&amp;description=0&amp;rel=0" title="TikTok by @collegewithgio: when I got into Stanford" allow="encrypted-media; picture-in-picture; fullscreen"></iframe>
+        </div><span class="phone__glass" aria-hidden="true"></span></div>
+        <div class="plinth"><div class="label">
+          <h3>When I got into Stanford</h3>
+          <ul class="stats"><li><b>75K</b><span>views</span></li><li><b>10K</b><span>likes</span></li><li><b>486</b><span>saves</span></li></ul>
+          <a class="label__cta" href="https://www.tiktok.com/@collegewithgio/video/7580235100886011149" target="_blank" rel="noopener">TikTok
+            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M3 9l6-6M4 3h5v5"/></svg></a>
+        </div></div>
+      </article>
+
+      <span class="column column--broken" aria-hidden="true"><span class="column__cap"></span><span class="column__shaft"></span><span class="column__base"></span></span>
+
+      <a class="exit" href="index.html#menu" data-stop data-label="Return to the reef">
+        <span class="exit__arch" aria-hidden="true">
+          <i style="--x:30%; --s:7px; --d:5s; --delay:0s"></i>
+          <i style="--x:58%; --s:4px; --d:6.5s; --delay:1.6s"></i>
+          <i style="--x:44%; --s:10px; --d:7s; --delay:3.2s"></i>
+          <i style="--x:66%; --s:5px; --d:5.5s; --delay:4.1s"></i>
+        </span>
+        <span class="exit__label">Up to the reef</span>
+        <span class="kelp" style="left:calc(50% - clamp(95px, 9vw, 130px) - 46px); --h:calc(26 * var(--vh)); --d:7s; bottom:-1px" aria-hidden="true"><svg viewBox="0 0 60 300"><path fill="currentColor" d="M30 300C22 240 40 200 28 150C18 110 34 70 26 20C25 10 30 2 33 0C38 40 26 80 36 130C46 180 30 230 38 300Z"/></svg></span>
+      </a>
+    </div>
+  </main>
+
+  <div class="caustics" aria-hidden="true"><div class="caustics__move"><i></i><i></i></div></div>
+
+  <a class="back" href="index.html#menu">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg>
+    The Reef
   </a>
   <button class="sound" type="button" aria-pressed="true" aria-label="Sound">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z"/>
       <g class="waves"><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/></g>
       <g class="mute"><path d="M16 9.5l5 5M21 9.5l-5 5"/></g>
     </svg>
   </button>
 
-  <main class="hall" tabindex="-1">
-    <section class="room room--lobby" aria-label="Lobby">
-      <div class="lobby" data-stop>
-        <h1>Film &amp; Media</h1>
-        <span class="lobby__rule" aria-hidden="true"></span>
-        <p class="lobby__hint"><kbd>&larr;</kbd><kbd>&rarr;</kbd> to walk the hall</p>
-      </div>
-    </section>
-
-    <!-- Wing I: Arts Intensive films -->
-    <section class="room room--films" aria-labelledby="wing-films">
-      <header class="wing-panel" data-stop>
-        <p class="wing-panel__kicker">Wing I &middot; Short films</p>
-        <h2 id="wing-films">Script to Screen</h2>
-        <p>Stanford Arts Intensive &mdash; <em>Narrative Filmmaking: Script to Screen</em>, under Adam Tobin.</p>
-      </header>
-
-      <article class="exhibit exhibit--film" style="--n:0" data-stop>
-        <span class="lamp" aria-hidden="true"></span><span class="beam" aria-hidden="true"></span>
-        <button class="frame" type="button" data-film="gnomans-land" aria-label="Watch Gnoman’s Land">
-          <video muted loop playsinline preload="none" poster="assets/film/poster-gnomans-land.jpg" data-src="assets/film/loop-gnomans-land.mp4"></video>
-          <span class="frame__play" aria-hidden="true"><span><svg viewBox="0 0 20 20"><path d="M4 2.5l13 7.5-13 7.5z" fill="currentColor"/></svg></span></span>
-        </button>
-        <div class="plaque">
-          <h3>Gnoman&rsquo;s Land</h3>
-          <p class="plaque__meta">2026 &middot; Short &middot; 3:01</p>
-          <p class="plaque__role">Co-writer &amp; co-director</p>
-          <p class="plaque__credit">with Lillian Whelan</p>
-          <button class="plaque__cta" type="button" data-film="gnomans-land">
-            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 2.5l13 7.5-13 7.5z" fill="currentColor"/></svg> Watch
-          </button>
-        </div>
-      </article>
-
-      <article class="exhibit exhibit--film" style="--n:1" data-stop>
-        <span class="lamp" aria-hidden="true"></span><span class="beam" aria-hidden="true"></span>
-        <button class="frame" type="button" data-film="the-great-mystery" aria-label="Watch The Great Mystery">
-          <video muted loop playsinline preload="none" poster="assets/film/poster-the-great-mystery.jpg" data-src="assets/film/loop-the-great-mystery.mp4"></video>
-          <span class="frame__play" aria-hidden="true"><span><svg viewBox="0 0 20 20"><path d="M4 2.5l13 7.5-13 7.5z" fill="currentColor"/></svg></span></span>
-        </button>
-        <div class="plaque">
-          <h3>The Great Mystery</h3>
-          <p class="plaque__meta">2026 &middot; Short &middot; 3:18</p>
-          <p class="plaque__role">Actor</p>
-          <button class="plaque__cta" type="button" data-film="the-great-mystery">
-            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 2.5l13 7.5-13 7.5z" fill="currentColor"/></svg> Watch
-          </button>
-        </div>
-      </article>
-
-      <article class="exhibit exhibit--film" style="--n:2" data-stop>
-        <span class="lamp" aria-hidden="true"></span><span class="beam" aria-hidden="true"></span>
-        <button class="frame" type="button" data-film="unspeakable-horror" aria-label="Watch Unspeakable Horror">
-          <video muted loop playsinline preload="none" poster="assets/film/poster-unspeakable-horror.jpg" data-src="assets/film/loop-unspeakable-horror.mp4"></video>
-          <span class="frame__play" aria-hidden="true"><span><svg viewBox="0 0 20 20"><path d="M4 2.5l13 7.5-13 7.5z" fill="currentColor"/></svg></span></span>
-        </button>
-        <div class="plaque">
-          <h3>Unspeakable Horror</h3>
-          <p class="plaque__meta">2026 &middot; Short &middot; 2:40</p>
-          <p class="plaque__role">Actor</p>
-          <p class="plaque__credit">as Brody</p>
-          <button class="plaque__cta" type="button" data-film="unspeakable-horror">
-            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 2.5l13 7.5-13 7.5z" fill="currentColor"/></svg> Watch
-          </button>
-        </div>
-      </article>
-    </section>
-
-    <!-- Wing II: @andrewjiohkang -->
-    <section class="room room--ig" aria-labelledby="wing-ig">
-      <header class="wing-panel" data-stop>
-        <p class="wing-panel__kicker">Wing II &middot; Instagram</p>
-        <h2 id="wing-ig">@andrewjiohkang</h2>
-        <p>Stanford Royale. Millions of views &mdash; my first real endeavor scaling a brand from zero.</p>
-      </header>
-
-      <article class="exhibit exhibit--phone" style="--n:0" data-stop>
-        <span class="lamp" aria-hidden="true"></span><span class="beam" aria-hidden="true"></span>
-        <div class="phone"><div class="phone__screen">
-          <iframe data-src="https://www.instagram.com/p/DR57Ao_Ebbi/embed/captioned/" data-w="326" title="Instagram reel by @andrewjiohkang: Clash Royale League?" scrolling="no" allow="encrypted-media; picture-in-picture; fullscreen"></iframe>
-        </div></div>
-        <div class="pedestal"><div class="plaque">
-          <h3>Clash Royale League?</h3>
-          <ul class="stats"><li><b>1.4M</b> views</li><li><b>108K</b> likes</li><li><b>3,900</b> comments</li></ul>
-          <a class="plaque__cta" href="https://www.instagram.com/p/DR57Ao_Ebbi/" target="_blank" rel="noopener">Open on Instagram
-            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 9l6-6M4 3h5v5"/></svg></a>
-        </div></div>
-      </article>
-
-      <article class="exhibit exhibit--phone" style="--n:1" data-stop>
-        <span class="lamp" aria-hidden="true"></span><span class="beam" aria-hidden="true"></span>
-        <div class="phone"><div class="phone__screen">
-          <iframe data-src="https://www.instagram.com/reel/DRI315djwKl/embed/captioned/" data-w="326" title="Instagram reel by @andrewjiohkang: start a Clash Royale club" scrolling="no" allow="encrypted-media; picture-in-picture; fullscreen"></iframe>
-        </div></div>
-        <div class="pedestal"><div class="plaque">
-          <h3>Start a Clash Royale club</h3>
-          <ul class="stats"><li><b>794K</b> views</li><li><b>52.7K</b> likes</li><li><b>58.8K</b> shares</li></ul>
-          <a class="plaque__cta" href="https://www.instagram.com/reel/DRI315djwKl/" target="_blank" rel="noopener">Open on Instagram
-            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 9l6-6M4 3h5v5"/></svg></a>
-        </div></div>
-      </article>
-    </section>
-
-    <!-- Wing III: College with Gio -->
-    <section class="room room--tt" aria-labelledby="wing-tt">
-      <header class="wing-panel" data-stop>
-        <p class="wing-panel__kicker">Wing III &middot; TikTok</p>
-        <h2 id="wing-tt">College with Gio</h2>
-        <p>@collegewithgio &mdash; my first semi-viral moments on social media.</p>
-      </header>
-
-      <article class="exhibit exhibit--phone" style="--n:0" data-stop>
-        <span class="lamp" aria-hidden="true"></span><span class="beam" aria-hidden="true"></span>
-        <div class="phone"><div class="phone__screen phone__screen--dark">
-          <iframe data-src="https://www.tiktok.com/player/v1/7532566227059887391?music_info=0&amp;description=0&amp;rel=0" title="TikTok by @collegewithgio: college decisions" allow="encrypted-media; picture-in-picture; fullscreen"></iframe>
-        </div></div>
-        <div class="pedestal"><div class="plaque">
-          <h3>College decisions</h3>
-          <ul class="stats"><li><b>383.2K</b> views</li><li><b>64.2K</b> likes</li><li><b>4,500</b> shares</li></ul>
-          <a class="plaque__cta" href="https://www.tiktok.com/@collegewithgio/video/7532566227059887391" target="_blank" rel="noopener">Open on TikTok
-            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 9l6-6M4 3h5v5"/></svg></a>
-        </div></div>
-      </article>
-
-      <article class="exhibit exhibit--phone" style="--n:1" data-stop>
-        <span class="lamp" aria-hidden="true"></span><span class="beam" aria-hidden="true"></span>
-        <div class="phone"><div class="phone__screen phone__screen--dark">
-          <iframe data-src="https://www.tiktok.com/player/v1/7580235100886011149?music_info=0&amp;description=0&amp;rel=0" title="TikTok by @collegewithgio: when I got into Stanford" allow="encrypted-media; picture-in-picture; fullscreen"></iframe>
-        </div></div>
-        <div class="pedestal"><div class="plaque">
-          <h3>When I got into Stanford</h3>
-          <ul class="stats"><li><b>75K</b> views</li><li><b>10K</b> likes</li><li><b>486</b> saves</li></ul>
-          <a class="plaque__cta" href="https://www.tiktok.com/@collegewithgio/video/7580235100886011149" target="_blank" rel="noopener">Open on TikTok
-            <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 9l6-6M4 3h5v5"/></svg></a>
-        </div></div>
-      </article>
-    </section>
-
-    <section class="room room--exit" aria-label="Exit">
-      <a class="exit" href="index.html#menu" data-stop>
-        <span class="exit__sign">Exit</span>
-        <span class="exit__door" aria-hidden="true"></span>
-        <span class="exit__label">Back to the reef</span>
-      </a>
-    </section>
-  </main>
-
-  <div class="avatar" aria-hidden="true"><img src="assets/sticker-face.png" alt=""></div>
-
-  <button class="walk walk--prev" type="button" aria-label="Walk left" disabled>
-    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.5 4l-6 6 6 6"/></svg>
-  </button>
-  <button class="walk walk--next" type="button" aria-label="Walk right">
-    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 4l6 6-6 6"/></svg>
-  </button>
+  <nav class="nav" aria-label="Walk the museum">
+    <button class="nav__prev" type="button" aria-label="Previous">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg>
+    </button>
+    <span class="nav__label" aria-live="polite">Entrance</span>
+    <button class="nav__next" type="button" aria-label="Next">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3l5 5-5 5"/></svg>
+    </button>
+  </nav>
 
   <dialog class="theater" aria-labelledby="theater-title">
-    <div class="stage">
-      <video controls playsinline preload="none"></video>
-      <span class="curtain curtain--l" aria-hidden="true"></span>
-      <span class="curtain curtain--r" aria-hidden="true"></span>
-    </div>
+    <div class="stage"><video controls playsinline preload="none"></video></div>
     <div class="theater__caption">
       <h3 class="theater__title" id="theater-title"></h3>
       <p class="theater__meta"></p>
     </div>
-    <button class="theater__close" type="button" aria-label="Close">
-      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13"/></svg>
+    <button class="theater__close" type="button">Close
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 3l10 10M13 3L3 13"/></svg>
     </button>
   </dialog>
 
@@ -882,12 +1043,15 @@
       'unspeakable-horror': { title: 'Unspeakable Horror', meta: 'Actor, as Brody · Stanford Arts Intensive · 2026' }
     };
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var coarse = window.matchMedia('(pointer: coarse)').matches;
     var body = document.body;
     var hall = document.querySelector('.hall');
     var stops = Array.prototype.slice.call(document.querySelectorAll('[data-stop]'));
-    var prevBtn = document.querySelector('.walk--prev');
-    var nextBtn = document.querySelector('.walk--next');
-    var avatar = document.querySelector('.avatar');
+    var prevBtn = document.querySelector('.nav__prev');
+    var nextBtn = document.querySelector('.nav__next');
+    var navLabel = document.querySelector('.nav__label');
+    var ruins = document.querySelector('.ruins');
+    var causticsMove = document.querySelector('.caustics__move');
     var theater = document.querySelector('.theater');
     var screen = theater.querySelector('video');
 
@@ -903,15 +1067,16 @@
         }
         if (ctx.state === 'suspended') ctx.resume();
       }
+      function live() { return on && ctx && ctx.state === 'running'; }
       function tone(o) {
-        if (!on || !ctx || ctx.state !== 'running') return;
+        if (!live()) return;
         var t = ctx.currentTime + (o.delay || 0), dur = o.dur || .08;
         var osc = ctx.createOscillator(), g = ctx.createGain();
         osc.type = o.type || 'sine';
         osc.frequency.setValueAtTime(o.f0, t);
         osc.frequency.exponentialRampToValueAtTime(o.f1 || o.f0, t + dur);
         g.gain.setValueAtTime(.0001, t);
-        g.gain.exponentialRampToValueAtTime(o.gain || .08, t + .008);
+        g.gain.exponentialRampToValueAtTime(o.gain || .08, t + .01);
         g.gain.exponentialRampToValueAtTime(.0001, t + dur);
         osc.connect(g); g.connect(ctx.destination);
         osc.start(t); osc.stop(t + dur + .03);
@@ -920,11 +1085,22 @@
         unlock: unlock,
         get on() { return on; },
         set on(v) { on = v; try { localStorage.setItem('agk-sound', v ? 'on' : 'off'); } catch (e) {} },
-        blip: function () { tone({ f0: 900, f1: 1300, dur: .06, gain: .04 }); },
-        step: function () { tone({ type: 'triangle', f0: 520, f1: 440, dur: .07, gain: .05 }); },
+        bloop: function () { tone({ f0: 380, f1: 640, dur: .08, gain: .035 }); },
+        // a soft underwater swish when gliding to the next exhibit
+        glide: function () {
+          if (!live()) return;
+          var t = ctx.currentTime, len = .42, sr = ctx.sampleRate;
+          var buf = ctx.createBuffer(1, sr * len, sr), d = buf.getChannelData(0);
+          for (var i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+          var src = ctx.createBufferSource(), lp = ctx.createBiquadFilter(), g = ctx.createGain();
+          src.buffer = buf; lp.type = 'lowpass'; lp.Q.value = 2;
+          lp.frequency.setValueAtTime(380, t); lp.frequency.exponentialRampToValueAtTime(1100, t + .16); lp.frequency.exponentialRampToValueAtTime(260, t + len);
+          g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.05, t + .12); g.gain.exponentialRampToValueAtTime(.0001, t + len);
+          src.connect(lp); lp.connect(g); g.connect(ctx.destination); src.start(t); src.stop(t + len);
+        },
         select: function () {
-          tone({ type: 'triangle', f0: 660, dur: .09, gain: .07 });
-          tone({ type: 'triangle', f0: 990, dur: .14, gain: .07, delay: .08 });
+          tone({ f0: 523, dur: .12, gain: .06 });
+          tone({ f0: 784, dur: .2, gain: .05, delay: .09 });
         }
       };
     })();
@@ -933,7 +1109,7 @@
     soundBtn.addEventListener('click', function () {
       Sound.on = !Sound.on;
       soundBtn.setAttribute('aria-pressed', String(Sound.on));
-      if (Sound.on) { Sound.unlock(); Sound.blip(); }
+      if (Sound.on) { Sound.unlock(); Sound.bloop(); }
     });
     ['pointerdown', 'keydown'].forEach(function (ev) { window.addEventListener(ev, Sound.unlock, true); });
 
@@ -948,54 +1124,135 @@
       }
     } catch (e) {}
 
-    /* ---------- Lights up ---------- */
     setTimeout(function () { body.classList.add('lit'); }, 150);
 
-    /* ---------- Walking the hall ---------- */
-    function centers() {
-      var x = hall.scrollLeft;
-      return stops.map(function (el) { var r = el.getBoundingClientRect(); return x + r.left + r.width / 2; });
+    /* ---------- Gliding between exhibits ----------
+       We track which stop you're on, so every press moves exactly one exhibit,
+       even mid-glide. Motion is a critically damped spring: it keeps its speed
+       when you press again, so quick presses chain into one smooth move. */
+    function maxScroll() { return hall.scrollWidth - hall.clientWidth; }
+    function posOf(i) {
+      var r = stops[i].getBoundingClientRect();
+      var x = hall.scrollLeft + r.left + r.width / 2 - hall.clientWidth / 2;
+      return Math.max(0, Math.min(maxScroll(), x));
     }
-    function step(dir) {
-      var mid = hall.scrollLeft + innerWidth / 2, cs = centers(), target = null, i;
-      if (dir > 0) { for (i = 0; i < cs.length; i++) if (cs[i] > mid + 12) { target = cs[i]; break; } }
-      else { for (i = cs.length - 1; i >= 0; i--) if (cs[i] < mid - 12) { target = cs[i]; break; } }
-      if (target === null) return;
-      hall.scrollTo({ left: target - innerWidth / 2, behavior: reduce ? 'auto' : 'smooth' });
-      Sound.step();
+    function nearest() {
+      var x = hall.scrollLeft, best = 0, bestD = Infinity;
+      for (var i = 0; i < stops.length; i++) { var d = Math.abs(posOf(i) - x); if (d < bestD) { bestD = d; best = i; } }
+      return best;
     }
-    prevBtn.addEventListener('click', function () { step(-1); });
-    nextBtn.addEventListener('click', function () { step(1); });
 
-    // vertical wheels walk sideways
-    hall.addEventListener('wheel', function (e) {
-      if (theater.open || Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
-      hall.scrollLeft += e.deltaY * (e.deltaMode === 1 ? 32 : 1);
-      e.preventDefault();
-    }, { passive: false });
+    var index = 0, target = 0, pos = 0, vel = 0, raf = null, last = 0;
+    function tick(now) {
+      var dt = Math.min(.032, (now - last) / 1000); last = now;
+      var w = 8.5;
+      vel += (w * w * (target - pos) - 2 * w * vel) * dt;
+      pos += vel * dt;
+      if (Math.abs(target - pos) < .4 && Math.abs(vel) < 4) {
+        hall.scrollLeft = target; raf = null; hall.style.scrollSnapType = '';
+        return;
+      }
+      hall.scrollLeft = pos;
+      raf = requestAnimationFrame(tick);
+    }
+    function glideTo(x) {
+      target = x;
+      if (reduce) { hall.scrollLeft = x; return; }
+      if (!raf) {
+        pos = hall.scrollLeft; vel = 0; last = performance.now();
+        hall.style.scrollSnapType = 'none';
+        raf = requestAnimationFrame(tick);
+      }
+    }
+    function stopGlide() { if (raf) { cancelAnimationFrame(raf); raf = null; hall.style.scrollSnapType = ''; } }
+
+    function go(dir) {
+      var from = posOf(index), i = index + dir;
+      // skip stops that land on the same spot (the ends of the hall can't always center)
+      while (i >= 0 && i < stops.length && Math.abs(posOf(i) - from) < 6) i += dir;
+      if (i < 0 || i >= stops.length) return;
+      setIndex(i);
+      glideTo(posOf(i));
+      Sound.glide();
+    }
+    function setIndex(i) {
+      index = i;
+      navLabel.textContent = stops[i].getAttribute('data-label');
+      prevBtn.disabled = i === 0;
+      nextBtn.disabled = i === stops.length - 1;
+    }
+    setIndex(0);
+    prevBtn.addEventListener('click', function () { go(-1); });
+    nextBtn.addEventListener('click', function () { go(1); });
 
     document.addEventListener('keydown', function (e) {
       if (theater.open || e.metaKey || e.ctrlKey || e.altKey) return;
-      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') { e.preventDefault(); step(1); }
-      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') { e.preventDefault(); step(-1); }
+      if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') { e.preventDefault(); go(1); }
+      if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') { e.preventDefault(); go(-1); }
     });
 
-    var lastX = 0, walkTimer;
-    function onScroll() {
-      var x = hall.scrollLeft, max = hall.scrollWidth - hall.clientWidth;
-      prevBtn.disabled = x < 8;
-      nextBtn.disabled = x > max - 8;
-      if (x !== lastX) {
-        avatar.classList.toggle('is-left', x < lastX);
-        avatar.classList.add('is-walking');
-        clearTimeout(walkTimer);
-        walkTimer = setTimeout(function () { avatar.classList.remove('is-walking'); }, 160);
+    // Wheels and trackpads: one flick moves one exhibit. A new flick is recognised
+    // either after a pause or when it arrives on top of the last one's momentum.
+    var wheelSum = 0, wheelAt = 0, wheelLocked = false, lastMag = 0, steppedAt = 0;
+    hall.addEventListener('wheel', function (e) {
+      if (theater.open) return;
+      e.preventDefault();
+      var d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      if (e.deltaMode === 1) d *= 32;
+      var now = performance.now(), mag = Math.abs(d);
+      if (now - wheelAt > 170) { wheelLocked = false; wheelSum = 0; }
+      else if (wheelLocked && now - steppedAt > 280 && mag > lastMag * 1.6 + 6) { wheelLocked = false; wheelSum = 0; }
+      wheelAt = now; lastMag = mag;
+      if (wheelLocked) return;
+      wheelSum += d;
+      if (Math.abs(wheelSum) >= 30) {
+        go(wheelSum > 0 ? 1 : -1);
+        wheelLocked = true; steppedAt = now; wheelSum = 0;
       }
-      lastX = x;
+    }, { passive: false });
+
+    // touch swipes use native momentum + snap; afterwards, sync which stop we're on
+    hall.addEventListener('pointerdown', function (e) { if (e.pointerType === 'touch') stopGlide(); });
+    var settleTimer;
+    function onScroll() {
+      var x = hall.scrollLeft;
+      ruins.style.transform = 'translate3d(' + (-x * .12).toFixed(1) + 'px,0,0)';
+      causticsMove.style.transform = 'translate3d(' + (-(x % 512)).toFixed(1) + 'px,0,0)';
+      if (!raf) {
+        clearTimeout(settleTimer);
+        settleTimer = setTimeout(function () { if (!raf) setIndex(nearest()); }, 140);
+      }
     }
     hall.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
+    window.addEventListener('resize', function () { stopGlide(); hall.scrollLeft = posOf(index); });
     hall.focus({ preventScroll: true });
+
+    /* ---------- Marine snow, drifting with parallax ---------- */
+    var snow = document.querySelector('.snow'), sctx = snow.getContext('2d'), flakes = [];
+    function sizeSnow() {
+      var r = Math.min(window.devicePixelRatio || 1, 2);
+      snow.width = Math.round(innerWidth * r); snow.height = Math.round(innerHeight * r);
+      sctx.setTransform(r, 0, 0, r, 0, 0);
+    }
+    sizeSnow();
+    window.addEventListener('resize', sizeSnow);
+    for (var f = 0; f < 90; f++) {
+      flakes.push({ x: Math.random(), y: Math.random(), z: .25 + Math.random() * .75, r: .5 + Math.random() * 1.5,
+                    vy: (Math.random() - .65) * .012, ph: Math.random() * 6.28 });
+    }
+    function drawSnow(t) {
+      var W = innerWidth, H = innerHeight, sx = hall.scrollLeft;
+      sctx.clearRect(0, 0, W, H);
+      for (var i = 0; i < flakes.length; i++) {
+        var p = flakes[i];
+        if (!reduce) { p.y += p.vy * p.z * .1; if (p.y < -.02) p.y = 1.02; if (p.y > 1.02) p.y = -.02; }
+        var x = ((p.x * W - sx * .35 * p.z + Math.sin(t / 2400 + p.ph) * 8) % W + W) % W;
+        sctx.globalAlpha = .12 + .38 * p.z;
+        sctx.beginPath(); sctx.arc(x, p.y * H, p.r * p.z + .3, 0, 6.283); sctx.fillStyle = '#d9f3ef'; sctx.fill();
+      }
+      if (!reduce) requestAnimationFrame(drawSnow);
+    }
+    requestAnimationFrame(drawSnow);
 
     /* ---------- Silent loops play only while on screen ---------- */
     if ('IntersectionObserver' in window) {
@@ -1036,6 +1293,22 @@
     fitEmbeds();
     window.addEventListener('resize', fitEmbeds);
 
+    // Phones: a pane of glass keeps swipes and wheel on the hall. With a mouse it
+    // steps aside once you rest on the phone; on touch, tapping opens the post.
+    document.querySelectorAll('.phone').forEach(function (ph) {
+      var glass = ph.querySelector('.phone__glass'), dwell;
+      if (coarse) {
+        glass.addEventListener('click', function () { window.open(ph.getAttribute('data-href'), '_blank', 'noopener'); });
+        return;
+      }
+      function arm() { clearTimeout(dwell); dwell = setTimeout(function () { ph.classList.add('is-live'); }, 260); }
+      ph.addEventListener('pointerenter', arm);
+      glass.addEventListener('pointermove', arm);
+      glass.addEventListener('wheel', arm);
+      glass.addEventListener('click', function () { clearTimeout(dwell); ph.classList.add('is-live'); });
+      ph.addEventListener('pointerleave', function () { clearTimeout(dwell); ph.classList.remove('is-live'); });
+    });
+
     /* ---------- Theater ---------- */
     function openFilm(id) {
       var f = FILMS[id];
@@ -1059,8 +1332,8 @@
       screen.load();
     });
 
-    document.querySelectorAll('.frame, .phone, .plaque__cta, .exit').forEach(function (el) {
-      el.addEventListener('pointerenter', function () { Sound.blip(); });
+    document.querySelectorAll('.frame, .phone, .label__cta, .exit').forEach(function (el) {
+      el.addEventListener('pointerenter', function (e) { if (e.pointerType === 'mouse') Sound.bloop(); });
     });
   })();
   </script>

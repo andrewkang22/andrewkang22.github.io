@@ -219,6 +219,7 @@
     @keyframes nudge { 50% { translate: 0 4px; } }
 
     .hello.is-leaving .hi,
+    .hello.is-leaving .note,
     .hello.is-leaving .dialog { opacity: 0; transition: opacity .18s ease; animation-play-state: paused; }
 
     /* ---------- Sticker menu ---------- */
@@ -403,21 +404,19 @@
                          21% 97%, 16% 93%, 11% 96%, 6% 92%, 2% 96%, 0 93%);
     }
 
-    /* ---------- Pencil note on the About Me sticker ---------- */
-    .li--about { position: relative; }
+    /* ---------- Pencil note pointing at the snorkeler (positions are % of the photo) ---------- */
     .note {
       position: absolute;
       inset: 0;
-      z-index: 2;
       color: var(--pencil);
       pointer-events: none;
     }
     .note__arrow {
       position: absolute;
-      left: calc(var(--cell) * .82);
-      top: calc(var(--cell) * .6);
-      width: calc(var(--cell) * .22);
-      height: calc(var(--cell) * .5);
+      left: 55.7%;
+      top: 38.4%;
+      width: 4.1%;
+      height: 7.1%;
       overflow: visible;
       fill: none;
       stroke: currentColor;
@@ -427,24 +426,29 @@
       stroke-linejoin: round;
     }
     .note__arrow path { stroke-dasharray: 1; stroke-dashoffset: 1; vector-effect: non-scaling-stroke; }
-    .menu.is-in .note__shaft { animation: draw .45s ease-out 1.85s forwards; }
-    .menu.is-in .note__head  { animation: draw .18s ease-out 2.3s forwards; }
+    .is-ready .note__shaft { animation: draw .45s ease-out 2.6s forwards; }
+    .is-ready .note__head  { animation: draw .18s ease-out 3.05s forwards; }
     @keyframes draw { to { stroke-dashoffset: 0; } }
     .note__text {
       position: absolute;
-      left: calc(var(--cell) * 1.0);
-      top: calc(var(--cell) * 1.06);
+      left: 60.4%;
+      top: 44.6%;
       font-family: var(--hand);
       font-weight: 700;
-      font-size: max(19px, calc(var(--cell) * .145));
+      font-size: clamp(20px, calc(max(100vw, calc(150 * var(--vh))) * .023), 38px);
       line-height: 1;
       white-space: nowrap;
-      rotate: 3deg;
+      rotate: 4deg;
       text-shadow: 0 0 1px rgba(255, 255, 255, .9), 0 0 4px rgba(255, 255, 255, .85), 0 0 12px rgba(255, 255, 255, .5);
       clip-path: inset(-30% 100% -30% 0);
     }
-    .menu.is-in .note__text { animation: write .75s linear 1.1s forwards; }
+    .is-ready .note__text { animation: write .75s linear 1.85s forwards; }
     @keyframes write { to { clip-path: inset(-30% -5% -30% -5%); } }
+    /* tall phones crop the right side of the photo, so tuck the note in under him */
+    @media (max-aspect-ratio: 7/10) {
+      .note__arrow { left: 47.5%; top: 40%; width: 3.5%; height: 6%; }
+      .note__text { left: 51.2%; top: 45.6%; rotate: -2deg; font-size: clamp(17px, 5.4vw, 23px); }
+    }
 
     /* ---------- Sound toggle ---------- */
     .sound {
@@ -477,9 +481,6 @@
     @media (max-width: 640px) {
       .menu { --cell: min(42vw, calc(21 * var(--vh)), 200px); padding-top: 88px; }
       .title { font-size: 24px; }
-      .li--about { margin-bottom: 30px; }
-      .note__arrow { top: calc(var(--cell) * .72); }
-      .note__text { left: auto; right: calc(var(--cell) * .02); top: calc(var(--cell) + 28px); rotate: -3deg; }
       .grid { grid-template-columns: repeat(2, var(--cell)); column-gap: 28px; }
       .dialog { padding: 18px 46px 20px 22px; }
     }
@@ -493,12 +494,12 @@
       .bob, .title__float { animation: none; }
       .slot.is-shocked .sticker, .shock b, .shock i { animation: none; }
       .menu.is-in .title { animation: fade-in .4s ease both; scale: 1; translate: 0 0; }
-      .menu.is-in .note__text { animation: none; clip-path: none; }
-      .menu.is-in .note__arrow path { animation: none; stroke-dashoffset: 0; }
+      .is-ready .note__text { animation: none; clip-path: none; }
+      .is-ready .note__arrow path { animation: none; stroke-dashoffset: 0; }
       .dialog.is-done .dialog__next { animation: none; }
     }
   </style>
-  <noscript><style>.hello { display: none; } .slot, .title { opacity: 1; scale: 1; } .menu { pointer-events: auto; } .reef img { scale: 1; } .note__text { clip-path: none; } .note__arrow path { stroke-dashoffset: 0; }</style></noscript>
+  <noscript><style>.hello { display: none; } .slot, .title { opacity: 1; scale: 1; } .menu { pointer-events: auto; } .reef img { scale: 1; }</style></noscript>
 </head>
 <body>
   <div class="reef" aria-hidden="true">
@@ -515,17 +516,9 @@
         <li><a class="slot" href="film.html" data-sfx="shocked" style="--i:0; --tilt:-5deg; --tag:-3deg; --dur:3.8s; --delay:-.6s">
           <span class="bob"><span class="sticker"><img src="assets/sticker-camera.png" alt=""></span><span class="tag">Film &amp; Media</span></span>
         </a></li>
-        <li class="li--about"><a class="slot" href="about.html" style="--i:1; --tilt:3deg; --tag:3deg; --dur:4.1s; --delay:-3s">
+        <li><a class="slot" href="about.html" style="--i:1; --tilt:3deg; --tag:3deg; --dur:4.1s; --delay:-3s">
           <span class="bob"><span class="sticker"><img src="assets/sticker-face.png" alt=""></span><span class="tag">About Me!</span></span>
-        </a>
-          <span class="note" aria-hidden="true">
-            <svg class="note__arrow" viewBox="0 0 44 100">
-              <path class="note__shaft" pathLength="1" d="M38 96 C 41 66, 31 26, 8 6"/>
-              <path class="note__head" pathLength="1" d="M12 17.3 L 8 6 L 19.8 8.2"/>
-            </svg>
-            <span class="note__text">this me btw...</span>
-          </span>
-        </li>
+        </a></li>
         <li><a class="slot" href="blog.html" style="--i:2; --tilt:4deg; --tag:2deg; --dur:4.4s; --delay:-2.1s; --size:.95">
           <span class="bob"><span class="sticker"><img src="assets/sticker-journal.png" alt=""></span><span class="tag">Blog</span></span>
         </a></li>
@@ -555,6 +548,13 @@
         <i style="--x:65%; --s:4px; --d:2.6s"></i>
       </div>
       <div class="hi-anchor"><div class="hi" aria-hidden="true">hi!</div></div>
+      <div class="note" aria-hidden="true">
+        <svg class="note__arrow" viewBox="0 0 87 100">
+          <path class="note__shaft" pathLength="1" d="M80 96 C 72 60, 46 22, 8 6"/>
+          <path class="note__head" pathLength="1" d="M15.8 16.4 L 8 6 L 20.9 4.4"/>
+        </svg>
+        <span class="note__text">this me btw...</span>
+      </div>
     </div>
     <p class="dialog" aria-live="polite">
       <span class="dialog__text"></span>
@@ -807,7 +807,6 @@
     function popStickers() {
       menu.classList.add('is-in');
       slots.forEach(function (s, i) { Sound.pop(i * .12 + .3); });
-      Sound.scribble(1.1);
     }
 
     function enterMenu() {
@@ -913,6 +912,7 @@
         body.classList.add('is-ready');
         state = 'intro';
         introTimer = setTimeout(typeMessage, reduce ? 300 : 1500);
+        setTimeout(function () { if (state !== 'diving' && state !== 'menu') Sound.scribble(); }, reduce ? 300 : 1850);
       });
   })();
   </script>
