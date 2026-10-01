@@ -310,6 +310,50 @@
     .slot:focus-visible .tag { background: var(--coral); color: #fff; scale: 1.06; }
     .slot:active .sticker { scale: .95; transition-duration: .12s; }
     .slot.is-picked .sticker { animation: picked .45s var(--spring); }
+
+    /* Animal Crossing-style "!" when the Film & Media sticker is picked */
+    .bob { position: relative; }
+    .slot.is-shocked .sticker { animation: shock-jump .55s var(--spring); }
+    @keyframes shock-jump {
+      0%   { scale: 1.1; translate: 0 0; rotate: 0deg; }
+      30%  { scale: 1.16; translate: 0 -22px; rotate: -3deg; }
+      100% { scale: 1.12; translate: 0 0; rotate: 0deg; }
+    }
+    .shock { position: absolute; z-index: 3; left: 50%; top: 4%; width: 0; height: 0; pointer-events: none; }
+    .shock b {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      translate: -50% 0;
+      font-family: "Arial Rounded MT Bold", ui-rounded, "Arial Black", system-ui, sans-serif;
+      font-size: clamp(50px, 5.6vw, 76px);
+      font-weight: 900;
+      line-height: 1;
+      color: var(--coral);
+      -webkit-text-stroke: 4px #fff;
+      paint-order: stroke fill;
+      filter: drop-shadow(0 4px 8px rgba(0, 25, 40, .35));
+      animation: bang .45s var(--spring) both;
+    }
+    .shock i {
+      position: absolute;
+      left: -3px;
+      bottom: 6px;
+      width: 6px;
+      height: 24px;
+      border-radius: 3px;
+      background: var(--ink);
+      box-shadow: 0 0 0 2px #fff;
+      transform-origin: 50% calc(100% + 54px);
+      rotate: var(--r);
+      animation: zing .4s ease-out both;
+    }
+    .shock i:nth-child(1) { --r: -58deg; }
+    .shock i:nth-child(2) { --r: -34deg; }
+    .shock i:nth-child(3) { --r: 34deg; }
+    .shock i:nth-child(4) { --r: 58deg; }
+    @keyframes bang { from { scale: 0; translate: -50% 20px; } to { scale: 1; translate: -50% 0; } }
+    @keyframes zing { from { opacity: 0; scale: 1 .2; } to { opacity: 1; scale: 1 1; } }
     @keyframes picked {
       0%   { scale: 1.1; rotate: 0deg; }
       35%  { scale: .86; rotate: -6deg; }
@@ -447,6 +491,7 @@
       .reef img { animation: none; scale: 1; }
       .menu.is-in .slot { animation: fade-in .4s ease both; scale: 1; }
       .bob, .title__float { animation: none; }
+      .slot.is-shocked .sticker, .shock b, .shock i { animation: none; }
       .menu.is-in .title { animation: fade-in .4s ease both; scale: 1; translate: 0 0; }
       .menu.is-in .note__text { animation: none; clip-path: none; }
       .menu.is-in .note__arrow path { animation: none; stroke-dashoffset: 0; }
@@ -467,7 +512,7 @@
     <h1 class="title"><span class="title__float"><span class="title__paper">Andrew&rsquo;s Reef</span></span></h1>
     <nav aria-label="Sections">
       <ul class="grid">
-        <li><a class="slot" href="film.html" style="--i:0; --tilt:-5deg; --tag:-3deg; --dur:3.8s; --delay:-.6s">
+        <li><a class="slot" href="film.html" data-sfx="shocked" style="--i:0; --tilt:-5deg; --tag:-3deg; --dur:3.8s; --delay:-.6s">
           <span class="bob"><span class="sticker"><img src="assets/sticker-camera.png" alt=""></span><span class="tag">Film &amp; Media</span></span>
         </a></li>
         <li class="li--about"><a class="slot" href="about.html" style="--i:1; --tilt:3deg; --tag:3deg; --dur:4.1s; --delay:-3s">
@@ -611,6 +656,9 @@
         }
       };
     })();
+
+    var shocked = new Audio('assets/sfx/shocked.mp3');
+    shocked.preload = 'auto';
 
     var soundBtn = document.querySelector('.sound');
     soundBtn.setAttribute('aria-pressed', String(Sound.on));
@@ -819,16 +867,34 @@
       s.addEventListener('pointerenter', function () { if (state === 'menu') Sound.blip(); });
       s.addEventListener('focus', function () { if (state === 'menu' && lastInputWasKey) Sound.blip(); });
       s.addEventListener('click', function (e) {
-        if (reduce || e.metaKey || e.ctrlKey || e.shiftKey) return;
+        var isShock = s.hasAttribute('data-sfx');
+        if ((reduce && !isShock) || e.metaKey || e.ctrlKey || e.shiftKey) return;
         e.preventDefault();
         if (s.classList.contains('is-picked')) return;
         s.classList.add('is-picked');
-        Sound.select();
-        setTimeout(function () { window.location.href = s.href; }, 420);
+        if (isShock) {
+          if (Sound.on) {
+            shocked.currentTime = 0;
+            var p = shocked.play(); if (p) p.catch(function () {});
+            try { sessionStorage.setItem('agk-shocked', String(Date.now())); } catch (err) {}
+          }
+          s.classList.add('is-shocked');
+          var fx = document.createElement('span');
+          fx.className = 'shock';
+          fx.setAttribute('aria-hidden', 'true');
+          fx.innerHTML = '<i></i><i></i><i></i><i></i><b>!</b>';
+          s.querySelector('.bob').appendChild(fx);
+        } else {
+          Sound.select();
+        }
+        setTimeout(function () { window.location.href = s.href; }, isShock ? 1050 : 420);
       });
     });
     window.addEventListener('pageshow', function () {
-      slots.forEach(function (s) { s.classList.remove('is-picked'); });
+      slots.forEach(function (s) {
+        s.classList.remove('is-picked', 'is-shocked');
+        var fx = s.querySelector('.shock'); if (fx) fx.remove();
+      });
     });
 
     /* ---------- Start once the hello layers have decoded ---------- */
