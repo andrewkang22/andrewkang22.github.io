@@ -679,15 +679,59 @@
     var shocked = new Audio('assets/sfx/shocked.mp3');
     shocked.preload = 'auto';
 
+    /* ---------- Background music: Welcome Horizons, looping from the intro into the menu ----------
+       The file is pre-mixed down to background level (phones ignore volume changes on web
+       audio), so here we just fade it in and out. Browsers only allow sound after the first
+       tap or key press, so if autoplay is blocked it starts on that first interaction. */
+    var Music = (function () {
+      var el = new Audio('assets/sfx/welcome-horizons.m4a');
+      el.loop = true;
+      el.preload = 'auto';
+      var wanted = false, fadeTimer = null;
+      function fade(to, ms, done) {
+        clearInterval(fadeTimer);
+        var from = el.volume, t0 = Date.now();
+        fadeTimer = setInterval(function () {
+          var t = Math.min(1, (Date.now() - t0) / ms);
+          try { el.volume = from + (to - from) * t; } catch (e) {}
+          if (t >= 1) { clearInterval(fadeTimer); if (done) done(); }
+        }, 30);
+      }
+      function start() {
+        if (!Sound.on || (wanted && !el.paused)) return;
+        wanted = true;
+        try { el.volume = 0; } catch (e) {}
+        var p = el.play();
+        if (p && p.then) p.then(function () { fade(1, 1800); }, function () { wanted = false; });
+        else fade(1, 1800);
+      }
+      function stop() {
+        wanted = false;
+        fade(0, 450, function () { el.pause(); });
+      }
+      // pause while the tab is in the background, pick back up when it returns
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) el.pause();
+        else if (wanted && Sound.on) { var p = el.play(); if (p && p.catch) p.catch(function () {}); }
+      });
+      return { start: start, stop: stop };
+    })();
+
     var soundBtn = document.querySelector('.sound');
     soundBtn.setAttribute('aria-pressed', String(Sound.on));
     soundBtn.addEventListener('click', function () {
       Sound.on = !Sound.on;
       soundBtn.setAttribute('aria-pressed', String(Sound.on));
-      if (Sound.on) { Sound.unlock(); Sound.blip(); }
+      if (Sound.on) { Sound.unlock(); Sound.blip(); Music.start(); }
+      else Music.stop();
     });
-    ['pointerdown', 'keydown'].forEach(function (ev) {
-      window.addEventListener(ev, function (e) { lastInputWasKey = ev === 'keydown'; Sound.unlock(); }, true);
+    // pointerup/touchend count as a "user gesture" on phones; pointerdown does for mice
+    ['pointerdown', 'pointerup', 'touchend', 'keydown'].forEach(function (ev) {
+      window.addEventListener(ev, function (e) {
+        if (ev === 'pointerdown' || ev === 'keydown') lastInputWasKey = ev === 'keydown';
+        Sound.unlock();
+        if (!(e.target && e.target.closest && e.target.closest('.sound'))) Music.start();
+      }, true);
     });
 
     /* ---------- Bubbles canvas (transition burst + ambient) ---------- */
@@ -926,10 +970,12 @@
           state = 'diving';
           body.classList.add('is-diving');
           popStickers(); enterMenu();
+          Music.start();
           return;
         }
         body.classList.add('is-ready');
         state = 'intro';
+        Music.start();
         introTimer = setTimeout(typeMessage, reduce ? 300 : 1500);
         setTimeout(function () { if (state !== 'diving' && state !== 'menu') Sound.scribble(); }, reduce ? 300 : 1850);
       });
