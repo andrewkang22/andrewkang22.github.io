@@ -403,6 +403,19 @@
                          66% 93%, 61% 98%, 56% 93%, 51% 96%, 46% 92%, 41% 97%, 36% 93%, 31% 96%, 26% 92%,
                          21% 97%, 16% 93%, 11% 96%, 6% 92%, 2% 96%, 0 93%);
     }
+    .title__name { margin: 0; font: inherit; }
+    /* small note under the title; wraps to the title's width instead of widening the paper */
+    .title__sub {
+      width: 0;
+      min-width: 100%;
+      margin: .45em 0 .2em;
+      font-size: clamp(12px, 1vw, 14.5px);
+      font-style: normal;
+      line-height: 1.45;
+      white-space: normal;
+      color: #46527a;
+    }
+    .title__sub i { font-style: italic; }
 
     /* ---------- Pencil note pointing at the snorkeler (positions are % of the photo) ---------- */
     .note {
@@ -510,7 +523,12 @@
   <canvas class="bubbles" aria-hidden="true"></canvas>
 
   <main class="menu" id="menu">
-    <h1 class="title"><span class="title__float"><span class="title__paper">Andrew&rsquo;s Reef</span></span></h1>
+    <div class="title">
+      <div class="title__float"><div class="title__paper">
+        <h1 class="title__name">Andrew&rsquo;s Reef</h1>
+        <p class="title__sub">The background is an <i>Acropora</i> coral reef in Guam, where I&rsquo;m from.</p>
+      </div></div>
+    </div>
     <nav aria-label="Sections">
       <ul class="grid">
         <li><a class="slot" href="film.html" data-sfx="shocked" style="--i:0; --tilt:-5deg; --tag:-3deg; --dur:3.8s; --delay:-.6s">
