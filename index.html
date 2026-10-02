@@ -218,6 +218,38 @@
     .dialog.is-done .dialog__next { opacity: 1; animation: nudge .9s ease-in-out infinite; }
     @keyframes nudge { 50% { translate: 0 4px; } }
 
+    /* "tap to dive in": only shown when the browser blocks sound, so the song and the wave start together */
+    .gate {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle at 50% 42%, rgba(255, 255, 255, .07), rgba(255, 255, 255, 0) 60%);
+      cursor: pointer;
+    }
+    .gate__btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 28px 16px 24px;
+      border: 0;
+      border-radius: 999px;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: clamp(20px, 2.2vw, 26px);
+      font-style: italic;
+      font-weight: 500;
+      line-height: 1;
+      box-shadow: 0 14px 34px rgba(0, 25, 40, .4);
+      cursor: pointer;
+      animation: gate-pulse 2.2s ease-in-out infinite;
+    }
+    .gate__btn svg { width: 22px; height: 22px; flex: none; }
+    .gate__btn:focus-visible { outline: 3px solid var(--coral); outline-offset: 4px; }
+    @keyframes gate-pulse { 50% { scale: 1.05; } }
+
     .hello.is-leaving .hi,
     .hello.is-leaving .note,
     .hello.is-leaving .dialog { opacity: 0; transition: opacity .18s ease; animation-play-state: paused; }
@@ -541,10 +573,10 @@
         <li><a class="slot" href="blog.html" style="--i:2; --tilt:4deg; --tag:2deg; --dur:4.4s; --delay:-2.1s; --size:.95">
           <span class="bob"><span class="sticker"><img src="assets/sticker-journal.png" alt=""></span><span class="tag">Blog</span></span>
         </a></li>
-        <li><a class="slot" href="research.html" style="--i:3; --tilt:-2deg; --tag:-2deg; --dur:3.5s; --delay:-1.3s">
+        <li><a class="slot" href="research.html" data-sfx="catch" style="--i:3; --tilt:-2deg; --tag:-2deg; --dur:3.5s; --delay:-1.3s">
           <span class="bob"><span class="sticker"><img src="assets/sticker-microscope.png" alt=""></span><span class="tag">Research</span></span>
         </a></li>
-        <li><a class="slot" href="projects.html" style="--i:4; --tilt:-4deg; --tag:-1deg; --dur:3.9s; --delay:-.2s">
+        <li><a class="slot" href="projects.html" data-sfx="greetings" style="--i:4; --tilt:-4deg; --tag:-1deg; --dur:3.9s; --delay:-.2s">
           <span class="bob"><span class="sticker"><img src="assets/sticker-mask.png" alt=""></span><span class="tag">Projects</span></span>
         </a></li>
         <li><a class="slot" href="venture.html" style="--i:5; --tilt:5deg; --tag:2deg; --dur:4.6s; --delay:-1.7s; --size:.95">
@@ -572,8 +604,16 @@
           <path class="note__shaft" pathLength="1" d="M80 96 C 72 60, 46 22, 8 6"/>
           <path class="note__head" pathLength="1" d="M15.8 16.4 L 8 6 L 20.9 4.4"/>
         </svg>
-        <span class="note__text">this me btw...</span>
+        <span class="note__text">this is me btw...</span>
       </div>
+    </div>
+    <div class="gate" hidden>
+      <button class="gate__btn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/>
+        </svg>
+        tap to dive in
+      </button>
     </div>
     <p class="dialog" aria-live="polite">
       <span class="dialog__text"></span>
@@ -678,6 +718,13 @@
 
     var shocked = new Audio('assets/sfx/shocked.mp3');
     shocked.preload = 'auto';
+    // stickers with their own Animal Crossing sound; `wait` lets it finish before the page changes
+    function cueSound(src) { var a = new Audio(src); a.preload = 'auto'; return a; }
+    var STICKER_SFX = {
+      shocked:   { audio: shocked, wait: 1050 },
+      catch:     { audio: cueSound('assets/sfx/catch.mp3'), wait: 780 },
+      greetings: { audio: cueSound('assets/sfx/greetings.mp3'), wait: 880 }
+    };
 
     /* ---------- Background music: Welcome Horizons, looping from the intro into the menu ----------
        The file is pre-mixed down to background level (phones ignore volume changes on web
@@ -709,12 +756,25 @@
         wanted = false;
         fade(0, 450, function () { el.pause(); });
       }
+      // Try to start the song from the top. Resolves false if the browser blocked it.
+      function tryStart() {
+        return new Promise(function (resolve) {
+          wanted = true;
+          try { el.currentTime = 0; el.volume = 0; } catch (e) {}
+          var p = el.play(), settled = false;
+          if (!p || !p.then) { fade(1, 1800); resolve(true); return; }
+          p.then(function () { settled = true; fade(1, 1800); resolve(true); },
+                 function () { settled = true; wanted = false; resolve(false); });
+          // a slow connection shouldn't hold the intro hostage
+          setTimeout(function () { if (!settled) resolve(true); }, 1500);
+        });
+      }
       // pause while the tab is in the background, pick back up when it returns
       document.addEventListener('visibilitychange', function () {
         if (document.hidden) el.pause();
         else if (wanted && Sound.on) { var p = el.play(); if (p && p.catch) p.catch(function () {}); }
       });
-      return { start: start, stop: stop };
+      return { start: start, stop: stop, tryStart: tryStart };
     })();
 
     var soundBtn = document.querySelector('.sound');
@@ -724,6 +784,7 @@
       soundBtn.setAttribute('aria-pressed', String(Sound.on));
       if (Sound.on) { Sound.unlock(); Sound.blip(); Music.start(); }
       else Music.stop();
+      if (state === 'gate' && !Sound.on) leaveGate();
     });
     // pointerup/touchend count as a "user gesture" on phones; pointerdown does for mice
     ['pointerdown', 'pointerup', 'touchend', 'keydown'].forEach(function (ev) {
@@ -908,6 +969,12 @@
 
     /* ---------- Keyboard: A/Enter to continue, arrows to move between stickers ---------- */
     document.addEventListener('keydown', function (e) {
+      if (state === 'gate') {
+        if (e.target.closest && e.target.closest('.sound')) return;
+        if (e.key === 'Enter' || e.key === ' ') e.preventDefault();
+        leaveGate();
+        return;
+      }
       if (state === 'intro' || state === 'typing' || state === 'ready') {
         if (e.target.closest && e.target.closest('button')) return;
         if (['Enter', ' ', 'ArrowRight', 'a', 'A', 'x', 'X'].indexOf(e.key) > -1) { e.preventDefault(); advance(); }
@@ -929,27 +996,29 @@
       s.addEventListener('pointerenter', function () { if (state === 'menu') Sound.blip(); });
       s.addEventListener('focus', function () { if (state === 'menu' && lastInputWasKey) Sound.blip(); });
       s.addEventListener('click', function (e) {
-        var isShock = s.hasAttribute('data-sfx');
-        if ((reduce && !isShock) || e.metaKey || e.ctrlKey || e.shiftKey) return;
+        var key = s.getAttribute('data-sfx'), cue = key && STICKER_SFX[key];
+        var isShock = key === 'shocked';
+        if ((reduce && !cue) || e.metaKey || e.ctrlKey || e.shiftKey) return;
         e.preventDefault();
         if (s.classList.contains('is-picked')) return;
         s.classList.add('is-picked');
+        var cuePlays = !!cue && Sound.on;
+        if (cuePlays) {
+          cue.audio.currentTime = 0;
+          var p = cue.audio.play(); if (p) p.catch(function () {});
+          if (isShock) { try { sessionStorage.setItem('agk-shocked', String(Date.now())); } catch (err) {} }
+        }
         if (isShock) {
-          if (Sound.on) {
-            shocked.currentTime = 0;
-            var p = shocked.play(); if (p) p.catch(function () {});
-            try { sessionStorage.setItem('agk-shocked', String(Date.now())); } catch (err) {}
-          }
           s.classList.add('is-shocked');
           var fx = document.createElement('span');
           fx.className = 'shock';
           fx.setAttribute('aria-hidden', 'true');
           fx.innerHTML = '<i></i><i></i><i></i><i></i><b>!</b>';
           s.querySelector('.bob').appendChild(fx);
-        } else {
+        } else if (!cuePlays) {
           Sound.select();
         }
-        setTimeout(function () { window.location.href = s.href; }, isShock ? 1050 : 420);
+        setTimeout(function () { window.location.href = s.href; }, cuePlays || isShock ? cue.wait : 420);
       });
     });
     window.addEventListener('pageshow', function () {
@@ -973,12 +1042,29 @@
           Music.start();
           return;
         }
-        body.classList.add('is-ready');
-        state = 'intro';
-        Music.start();
-        introTimer = setTimeout(typeMessage, reduce ? 300 : 1500);
-        setTimeout(function () { if (state !== 'diving' && state !== 'menu') Sound.scribble(); }, reduce ? 300 : 1850);
+        if (!Sound.on) { beginIntro(); return; }
+        state = 'gate';
+        Music.tryStart().then(function (playing) {
+          if (playing) beginIntro();
+          else { gate.hidden = false; gateBtn.focus({ preventScroll: true }); }
+        });
       });
+
+    function beginIntro() {
+      body.classList.add('is-ready');
+      state = 'intro';
+      introTimer = setTimeout(typeMessage, reduce ? 300 : 1500);
+      setTimeout(function () { if (state !== 'diving' && state !== 'menu') Sound.scribble(); }, reduce ? 300 : 1850);
+    }
+    var gate = hello.querySelector('.gate'), gateBtn = gate.querySelector('.gate__btn');
+    function leaveGate() {
+      if (state !== 'gate') return;
+      gate.hidden = true;
+      Sound.unlock();
+      Music.start();   // inside the tap, so the browser allows it; the song starts from the top
+      beginIntro();
+    }
+    gate.addEventListener('click', function (e) { e.stopPropagation(); leaveGate(); });
   })();
   </script>
 </body>
