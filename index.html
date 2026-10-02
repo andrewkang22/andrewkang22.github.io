@@ -224,6 +224,7 @@
 
     /* ---------- Sticker menu ---------- */
     .menu {
+      --tf: clamp(29px, 3.45vw, 49px);   /* journal-paper title size */
       --cell: min(21vw, calc(30 * var(--vh)), 260px);
       display: grid;
       place-items: center;
@@ -368,7 +369,7 @@
       left: clamp(10px, 2.4vw, 40px);
       top: clamp(14px, calc(3 * var(--vh)), 38px);
       margin: 0;
-      font-size: clamp(26px, 3.1vw, 44px);
+      font-size: var(--tf);
       font-weight: 500;
       font-style: italic;
       line-height: 1;
@@ -406,10 +407,10 @@
     .title__name { margin: 0; font: inherit; }
     /* small note under the title; wraps to the title's width instead of widening the paper */
     .title__sub {
-      width: 0;
+      width: calc(var(--tf) * 7.6);
       min-width: 100%;
       margin: .45em 0 .2em;
-      font-size: clamp(12px, 1vw, 14.5px);
+      font-size: max(12.5px, calc(var(--tf) * .3));
       font-style: normal;
       line-height: 1.45;
       white-space: normal;
@@ -492,8 +493,8 @@
 
     /* ---------- Small screens: 2 x 3 ---------- */
     @media (max-width: 640px) {
-      .menu { --cell: min(42vw, calc(21 * var(--vh)), 200px); padding-top: 88px; }
-      .title { font-size: 24px; }
+      .menu { --tf: 26px; --cell: min(42vw, calc(21 * var(--vh)), 200px); padding-top: 88px; }
+      .title__sub { width: min(250px, 66vw); }
       .grid { grid-template-columns: repeat(2, var(--cell)); column-gap: 28px; }
       .dialog { padding: 18px 46px 20px 22px; }
     }
@@ -526,7 +527,7 @@
     <div class="title">
       <div class="title__float"><div class="title__paper">
         <h1 class="title__name">Andrew&rsquo;s Reef</h1>
-        <p class="title__sub">The background is an <i>Acropora</i> coral reef in Guam, where I&rsquo;m from.</p>
+        <p class="title__sub">The background is an <i>Acropora</i> coral reef in Guam, where I&rsquo;m from &mdash; I&rsquo;ve snorkeled right above these reefs.</p>
       </div></div>
     </div>
     <nav aria-label="Sections">
