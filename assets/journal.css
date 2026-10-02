@@ -461,6 +461,10 @@ img { max-width: 100%; }
   margin-top: clamp(26px, 3.5vw, 38px);
 }
 .feature .polaroid { margin: 0; }
+.feature__text .case { margin-bottom: 40px; }
+.feature__text p { margin: 0 0 14px; }
+.feature__text p:last-child { margin-bottom: 0; }
+.gallery-label__aside { margin-left: 8px; font-size: 18px; color: var(--ink-soft); }
 .case {
   position: relative;
   padding: 18px 22px 20px;

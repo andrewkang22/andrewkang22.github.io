@@ -1,20 +1,40 @@
 // Underwater paper journal: pages settle in and pencil marks draw as you reach them.
+// A page is revealed as soon as its top comes into view. This is checked on load,
+// scroll, resize and hash jumps (with an observer as a backup), so a page can never
+// stay hidden, no matter how tall it is.
 (function () {
   var root = document.documentElement;
   root.classList.add('js');
-  var pages = document.querySelectorAll('.page');
-  if (!('IntersectionObserver' in window)) {
-    pages.forEach(function (p) { p.classList.add('is-seen'); });
-    return;
-  }
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (en) {
-      if (!en.isIntersecting) return;
-      en.target.classList.add('is-seen');
-      io.unobserve(en.target);
+  var pages = Array.prototype.slice.call(document.querySelectorAll('.page'));
+  function reveal(p) { p.classList.add('is-seen'); }
+  function check() {
+    var limit = window.innerHeight * 0.92;
+    pages = pages.filter(function (p) {
+      if (p.getBoundingClientRect().top < limit) { reveal(p); return false; }
+      return true;
     });
-  }, { threshold: .12 });
-  pages.forEach(function (p) { io.observe(p); });
+    if (!pages.length) {
+      window.removeEventListener('scroll', check);
+      window.removeEventListener('resize', check);
+      window.removeEventListener('hashchange', check);
+    }
+  }
+  window.addEventListener('scroll', check, { passive: true });
+  window.addEventListener('resize', check);
+  window.addEventListener('hashchange', check);
+  window.addEventListener('load', check);
+  check();
+
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        reveal(en.target);
+        io.unobserve(en.target);
+      });
+    }, { threshold: 0, rootMargin: '0px 0px -8% 0px' });
+    pages.forEach(function (p) { io.observe(p); });
+  }
 })();
 
 // Tap a photo to see it big.
