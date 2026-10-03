@@ -233,13 +233,14 @@
       /* how far down the paper reaches over the stickers; the script measures the real value */
       --band: calc(var(--tf) * 4.4);
       --air: clamp(16px, calc(3 * var(--vh)), 36px);   /* same gap under the paper and under the stickers */
+      --lift: clamp(0px, calc(3 * var(--vh) - 12px), 18px);   /* then nudge the stickers up a touch */
       --row-gap: clamp(10px, calc(4.5 * var(--vh)), 48px);
       --tag: calc(clamp(14px, 1.45vw, 19px) * 1.68 - 4px);
       /* stickers take what's left: two rows with their tags */
       --cell: min(23vw, calc((100 * var(--vh) - var(--band) - var(--row-gap) - 2 * var(--air)) / 2 - var(--tag)), 340px);
       display: grid;
       place-items: center;
-      padding: calc(var(--band) + var(--air)) 0 var(--air);
+      padding: calc(var(--band) + var(--air) - var(--lift)) 0 calc(var(--air) + var(--lift));
       pointer-events: none;
     }
     .is-menu .menu { pointer-events: auto; }
@@ -507,6 +508,7 @@
       .menu {
         --tf: 26px;
         --band: 170px;
+        --lift: 0px;
         --row-gap: 14px;
         --cell: min(42vw, calc((100 * var(--vh) - var(--band) - 2 * var(--row-gap) - 2 * var(--air)) / 3 - var(--tag)), 200px);
       }
