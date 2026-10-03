@@ -218,38 +218,6 @@
     .dialog.is-done .dialog__next { opacity: 1; animation: nudge .9s ease-in-out infinite; }
     @keyframes nudge { 50% { translate: 0 4px; } }
 
-    /* "tap to dive in": only shown when the browser blocks sound, so the song and the wave start together */
-    .gate {
-      position: absolute;
-      inset: 0;
-      z-index: 5;
-      display: grid;
-      place-items: center;
-      background: radial-gradient(circle at 50% 42%, rgba(255, 255, 255, .07), rgba(255, 255, 255, 0) 60%);
-      cursor: pointer;
-    }
-    .gate__btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      padding: 14px 28px 16px 24px;
-      border: 0;
-      border-radius: 999px;
-      background: var(--paper);
-      color: var(--ink);
-      font-family: var(--serif);
-      font-size: clamp(20px, 2.2vw, 26px);
-      font-style: italic;
-      font-weight: 500;
-      line-height: 1;
-      box-shadow: 0 14px 34px rgba(0, 25, 40, .4);
-      cursor: pointer;
-      animation: gate-pulse 2.2s ease-in-out infinite;
-    }
-    .gate__btn svg { width: 22px; height: 22px; flex: none; }
-    .gate__btn:focus-visible { outline: 3px solid var(--coral); outline-offset: 4px; }
-    @keyframes gate-pulse { 50% { scale: 1.05; } }
-
     .hello.is-leaving .hi,
     .hello.is-leaving .note,
     .hello.is-leaving .dialog { opacity: 0; transition: opacity .18s ease; animation-play-state: paused; }
@@ -607,14 +575,6 @@
         <span class="note__text">this is me btw...</span>
       </div>
     </div>
-    <div class="gate" hidden>
-      <button class="gate__btn" type="button">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M15.5 9a4 4 0 0 1 0 6"/><path d="M18 6.5a7.5 7.5 0 0 1 0 11"/>
-        </svg>
-        tap to dive in
-      </button>
-    </div>
     <p class="dialog" aria-live="polite">
       <span class="dialog__text"></span>
       <svg class="dialog__next" viewBox="0 0 16 12" aria-hidden="true"><path d="M1.5 1.5h13L8 10.5z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
@@ -735,6 +695,24 @@
       el.loop = true;
       el.preload = 'auto';
       var wanted = false, fadeTimer = null;
+      // Coming back to the reef (#menu) picks the song up where it left off; a fresh visit
+      // starts it from the top with the wave. The spot is kept per tab in sessionStorage.
+      var KEY = 'agk-music', from = 0, primed = false, started = false;
+      if (location.hash === '#menu') { try { from = parseFloat(sessionStorage.getItem(KEY)) || 0; } catch (e) {} }
+      function seekTo(t) {
+        if (!t) return;
+        if (el.readyState >= 1) { try { el.currentTime = t; } catch (e) {} return; }
+        el.addEventListener('loadedmetadata', function once() {
+          el.removeEventListener('loadedmetadata', once);
+          try { el.currentTime = t; } catch (e) {}
+        });
+      }
+      function save() {
+        if (started) try { sessionStorage.setItem(KEY, el.currentTime.toFixed(2)); } catch (e) {}
+      }
+      el.addEventListener('playing', function () { started = true; });
+      el.addEventListener('timeupdate', save);
+      window.addEventListener('pagehide', save);
       function fade(to, ms, done) {
         clearInterval(fadeTimer);
         var from = el.volume, t0 = Date.now();
@@ -747,6 +725,7 @@
       function start() {
         if (!Sound.on || (wanted && !el.paused)) return;
         wanted = true;
+        if (!primed) { primed = true; seekTo(from); }
         try { el.volume = 0; } catch (e) {}
         var p = el.play();
         if (p && p.then) p.then(function () { fade(1, 1800); }, function () { wanted = false; });
@@ -759,7 +738,7 @@
       // Try to start the song from the top. Resolves false if the browser blocked it.
       function tryStart() {
         return new Promise(function (resolve) {
-          wanted = true;
+          wanted = true; primed = true;
           try { el.currentTime = 0; el.volume = 0; } catch (e) {}
           var p = el.play(), settled = false;
           if (!p || !p.then) { fade(1, 1800); resolve(true); return; }
@@ -774,6 +753,10 @@
         if (document.hidden) el.pause();
         else if (wanted && Sound.on) { var p = el.play(); if (p && p.catch) p.catch(function () {}); }
       });
+      // the browser's back button can restore this page from memory with the song paused
+      window.addEventListener('pageshow', function (e) {
+        if (e.persisted && wanted && Sound.on) { var p = el.play(); if (p && p.catch) p.catch(function () {}); }
+      });
       return { start: start, stop: stop, tryStart: tryStart };
     })();
 
@@ -784,7 +767,6 @@
       soundBtn.setAttribute('aria-pressed', String(Sound.on));
       if (Sound.on) { Sound.unlock(); Sound.blip(); Music.start(); }
       else Music.stop();
-      if (state === 'gate' && !Sound.on) leaveGate();
     });
     // pointerup/touchend count as a "user gesture" on phones; pointerdown does for mice
     ['pointerdown', 'pointerup', 'touchend', 'keydown'].forEach(function (ev) {
@@ -969,12 +951,6 @@
 
     /* ---------- Keyboard: A/Enter to continue, arrows to move between stickers ---------- */
     document.addEventListener('keydown', function (e) {
-      if (state === 'gate') {
-        if (e.target.closest && e.target.closest('.sound')) return;
-        if (e.key === 'Enter' || e.key === ' ') e.preventDefault();
-        leaveGate();
-        return;
-      }
       if (state === 'intro' || state === 'typing' || state === 'ready') {
         if (e.target.closest && e.target.closest('button')) return;
         if (['Enter', ' ', 'ArrowRight', 'a', 'A', 'x', 'X'].indexOf(e.key) > -1) { e.preventDefault(); advance(); }
@@ -1043,11 +1019,9 @@
           return;
         }
         if (!Sound.on) { beginIntro(); return; }
-        state = 'gate';
-        Music.tryStart().then(function (playing) {
-          if (playing) beginIntro();
-          else { gate.hidden = false; gateBtn.focus({ preventScroll: true }); }
-        });
+        // wait for the song so it lines up with the wave; if the browser blocks autoplay,
+        // the intro runs anyway and the song starts from the top on the first tap or key press
+        Music.tryStart().then(beginIntro);
       });
 
     function beginIntro() {
@@ -1056,15 +1030,6 @@
       introTimer = setTimeout(typeMessage, reduce ? 300 : 1500);
       setTimeout(function () { if (state !== 'diving' && state !== 'menu') Sound.scribble(); }, reduce ? 300 : 1850);
     }
-    var gate = hello.querySelector('.gate'), gateBtn = gate.querySelector('.gate__btn');
-    function leaveGate() {
-      if (state !== 'gate') return;
-      gate.hidden = true;
-      Sound.unlock();
-      Music.start();   // inside the tap, so the browser allows it; the song starts from the top
-      beginIntro();
-    }
-    gate.addEventListener('click', function (e) { e.stopPropagation(); leaveGate(); });
   })();
   </script>
 </body>

@@ -605,3 +605,86 @@ img { max-width: 100%; }
   .num path, .checks path { stroke-dashoffset: 0; animation: none !important; }
   .is-seen .stamp, .js .page:not(.is-seen) .stamp, .is-seen .case .stamp, .js .page:not(.is-seen) .case .stamp { animation: none; scale: 1; opacity: .9; translate: none; }
 }
+
+/* ---------- Minimal variant (Venture): HEYTEA-like sans on the paper, no doodles ---------- */
+.journal--minimal { --sans: "Figtree", "Avenir Next", "Helvetica Neue", system-ui, sans-serif; }
+.journal--minimal .page {
+  font-family: var(--sans);
+  font-weight: 300;
+  font-size: clamp(16px, 1.15vw, 18px);
+  line-height: 1.7;
+  letter-spacing: .01em;
+}
+.journal--minimal .kicker { font-size: 12.5px; font-weight: 400; letter-spacing: .24em; color: var(--ink-soft); }
+.journal--minimal .page h1 { font-weight: 300; font-size: clamp(54px, 8vw, 92px); letter-spacing: .03em; line-height: 1; }
+.journal--minimal .lede { max-width: 38ch; font-size: clamp(17px, 1.4vw, 20px); color: var(--ink-soft); }
+.journal--minimal .toc a { gap: 16px; font-size: clamp(16px, 1.4vw, 19px); }
+.journal--minimal .toc__num { font-weight: 400; letter-spacing: .1em; color: var(--ink-soft); }
+.journal--minimal .toc__name { font-weight: 400; }
+.journal--minimal .toc__dots { border-bottom: 1px solid rgba(46, 50, 54, .14); translate: 0 -5px; }
+.journal--minimal .toc__what { font-size: .82em; }
+.journal--minimal .toc a:hover .toc__name { text-decoration: underline 1px; text-underline-offset: 5px; }
+.journal--minimal .tab { font-family: var(--sans); font-size: 13px; font-weight: 500; letter-spacing: .1em; }
+.journal--minimal .signoff { font-size: 14px; letter-spacing: .04em; }
+.journal--minimal .signoff a { font-weight: 400; color: var(--ink); }
+.journal--minimal .signoff a:hover { text-decoration: underline 1px; text-underline-offset: 4px; }
+
+.mhead { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
+.mhead__num { font-size: 13px; font-weight: 400; letter-spacing: .18em; color: var(--ink-soft); }
+.mhead h2 { margin: 0; font-size: clamp(36px, 4.8vw, 58px); font-weight: 300; line-height: 1.05; letter-spacing: .02em; }
+.journal--minimal .meta { margin: 12px 0 0; font-size: 13px; font-weight: 400; letter-spacing: .12em; color: var(--ink-soft); }
+.journal--minimal .meta span + span::before { margin-right: 14px; }
+
+.lead { max-width: 40ch; margin: clamp(24px, 3vw, 34px) 0 0; font-size: clamp(18px, 1.55vw, 22px); line-height: 1.55; }
+
+.plate { margin: clamp(26px, 3.5vw, 36px) 0 0; }
+.plate img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, .05), 0 12px 28px rgba(0, 28, 44, .14);
+}
+.plate--logo { width: min(320px, 70%); }
+.plate figcaption { margin-top: 10px; font-size: 13px; letter-spacing: .08em; color: var(--ink-soft); }
+
+.figures {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 22px 28px;
+  margin: clamp(28px, 3.5vw, 40px) 0 0;
+  padding: 22px 0;
+  border-top: 1px solid rgba(46, 50, 54, .12);
+  border-bottom: 1px solid rgba(46, 50, 54, .12);
+}
+.figures b { display: block; font-size: clamp(32px, 3.4vw, 46px); font-weight: 300; line-height: 1; letter-spacing: .01em; }
+.figures span { display: block; margin-top: 8px; font-size: 13px; line-height: 1.45; letter-spacing: .04em; color: var(--ink-soft); }
+
+.lines { margin: clamp(20px, 2.6vw, 28px) 0 0; padding: 0; list-style: none; }
+.lines li { position: relative; padding: 8px 0 8px 28px; }
+.lines li::before { content: ""; position: absolute; left: 0; top: 1.3em; width: 14px; height: 1px; background: var(--ink); opacity: .45; }
+
+.firms { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 0; padding: 0; list-style: none; }
+.firms li { padding: 3px 14px 4px; border: 1px solid rgba(46, 50, 54, .22); border-radius: 999px; font-size: 14px; font-weight: 400; }
+.firms-label { margin: clamp(26px, 3.2vw, 34px) 0 0; font-size: 13px; letter-spacing: .08em; color: var(--ink-soft); }
+
+.mlink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 26px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid rgba(46, 50, 54, .35);
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: .06em;
+  text-decoration: none;
+}
+.mlink:hover, .mlink:focus-visible { border-color: var(--ink); outline: none; }
+.mlink svg { width: 12px; height: 12px; }
+
+@media (max-width: 720px) {
+  .plate--logo { width: 78%; }
+  .figures { grid-template-columns: 1fr 1fr; }
+}
