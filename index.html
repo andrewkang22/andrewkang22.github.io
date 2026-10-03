@@ -6,8 +6,13 @@
   <title>Andrew Gio Kang</title>
   <meta name="description" content="Andrew Gio Kang's personal website.">
   <meta name="theme-color" content="#0b3b4a">
+  <script>
+    // start downloading the song before anything else, so it can play the moment the page opens
+    window.agkSong = new Audio('assets/sfx/welcome-horizons.m4a');
+    agkSong.preload = 'auto';
+  </script>
   <link rel="preload" as="image" href="assets/scene1-plate.jpg">
-  <link rel="preload" as="image" href="assets/reef-2.webp">
+  <link rel="preload" as="image" href="assets/reef-2.webp" fetchpriority="low">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@700&display=swap" rel="stylesheet">
@@ -225,13 +230,16 @@
     /* ---------- Sticker menu ---------- */
     .menu {
       --tf: clamp(28px, min(2.75vw, calc(5.2 * var(--vh))), 54px);   /* journal-paper title size */
-      --band: calc(var(--tf) * 4.4 + 8px);   /* room kept at the top for the paper */
+      /* how far down the paper reaches over the stickers; the script measures the real value */
+      --band: calc(var(--tf) * 4.4);
+      --air: clamp(16px, calc(3 * var(--vh)), 36px);   /* same gap under the paper and under the stickers */
       --row-gap: clamp(10px, calc(4.5 * var(--vh)), 48px);
-      /* stickers take what's left: two rows (plus their tags and a little air) under the paper */
-      --cell: min(23vw, calc((100 * var(--vh) - var(--band) - var(--row-gap)) / 2 - 39px), 340px);
+      --tag: calc(clamp(14px, 1.45vw, 19px) * 1.68 - 4px);
+      /* stickers take what's left: two rows with their tags */
+      --cell: min(23vw, calc((100 * var(--vh) - var(--band) - var(--row-gap) - 2 * var(--air)) / 2 - var(--tag)), 340px);
       display: grid;
       place-items: center;
-      padding-top: var(--band);
+      padding: calc(var(--band) + var(--air)) 0 var(--air);
       pointer-events: none;
     }
     .is-menu .menu { pointer-events: auto; }
@@ -494,14 +502,14 @@
     .sound .mute { opacity: 0; transition: opacity .2s ease; }
     .sound[aria-pressed="false"] .mute { opacity: 1; }
 
-    /* narrower screens put the left column right under the paper's low corner */
-    @media (max-width: 1100px) {
-      .menu { --band: calc(var(--tf) * 4.4 + 20px); }
-    }
-
     /* ---------- Small screens: 2 x 3 ---------- */
     @media (max-width: 640px) {
-      .menu { --tf: 26px; --cell: min(42vw, calc(21 * var(--vh)), 200px); padding-top: 88px; }
+      .menu {
+        --tf: 26px;
+        --band: 170px;
+        --row-gap: 14px;
+        --cell: min(42vw, calc((100 * var(--vh) - var(--band) - 2 * var(--row-gap) - 2 * var(--air)) / 3 - var(--tag)), 200px);
+      }
       .title__sub { width: min(250px, 66vw); }
       .grid { grid-template-columns: repeat(2, var(--cell)); column-gap: 28px; }
       .dialog { padding: 18px 46px 20px 22px; }
@@ -541,22 +549,22 @@
     <nav aria-label="Sections">
       <ul class="grid">
         <li><a class="slot" href="film" data-sfx="shocked" style="--i:0; --tilt:-5deg; --tag:-3deg; --dur:3.8s; --delay:-.6s">
-          <span class="bob"><span class="sticker"><img src="assets/sticker-camera.png" alt=""></span><span class="tag">Film &amp; Media</span></span>
+          <span class="bob"><span class="sticker"><img src="assets/sticker-camera.png" alt="" fetchpriority="low"></span><span class="tag">Film &amp; Media</span></span>
         </a></li>
         <li><a class="slot" href="about" style="--i:1; --tilt:3deg; --tag:3deg; --dur:4.1s; --delay:-3s">
-          <span class="bob"><span class="sticker"><img src="assets/sticker-face.png" alt=""></span><span class="tag">About Me!</span></span>
+          <span class="bob"><span class="sticker"><img src="assets/sticker-face.png" alt="" fetchpriority="low"></span><span class="tag">About Me!</span></span>
         </a></li>
         <li><a class="slot" href="blog" style="--i:2; --tilt:4deg; --tag:2deg; --dur:4.4s; --delay:-2.1s; --size:.95">
-          <span class="bob"><span class="sticker"><img src="assets/sticker-journal.png" alt=""></span><span class="tag">Blog</span></span>
+          <span class="bob"><span class="sticker"><img src="assets/sticker-journal.png" alt="" fetchpriority="low"></span><span class="tag">Blog</span></span>
         </a></li>
         <li><a class="slot" href="research" data-sfx="catch" style="--i:3; --tilt:-2deg; --tag:-2deg; --dur:3.5s; --delay:-1.3s">
-          <span class="bob"><span class="sticker"><img src="assets/sticker-microscope.png" alt=""></span><span class="tag">Research</span></span>
+          <span class="bob"><span class="sticker"><img src="assets/sticker-microscope.png" alt="" fetchpriority="low"></span><span class="tag">Research</span></span>
         </a></li>
         <li><a class="slot" href="projects" data-sfx="greetings" style="--i:4; --tilt:-4deg; --tag:-1deg; --dur:3.9s; --delay:-.2s">
-          <span class="bob"><span class="sticker"><img src="assets/sticker-mask.png" alt=""></span><span class="tag">Projects</span></span>
+          <span class="bob"><span class="sticker"><img src="assets/sticker-mask.png" alt="" fetchpriority="low"></span><span class="tag">Projects</span></span>
         </a></li>
         <li><a class="slot" href="venture" style="--i:5; --tilt:5deg; --tag:2deg; --dur:4.6s; --delay:-1.7s; --size:.95">
-          <span class="bob"><span class="sticker"><img src="assets/sticker-fins.png" alt=""></span><span class="tag">Venture</span></span>
+          <span class="bob"><span class="sticker"><img src="assets/sticker-fins.png" alt="" fetchpriority="low"></span><span class="tag">Venture</span></span>
         </a></li>
       </ul>
     </nav>
@@ -711,7 +719,7 @@
        audio), so here we just fade it in and out. Browsers only allow sound after the first
        tap or key press, so if autoplay is blocked it starts on that first interaction. */
     var Music = (function () {
-      var el = new Audio('assets/sfx/welcome-horizons.m4a');
+      var el = window.agkSong || new Audio('assets/sfx/welcome-horizons.m4a');   // already loading from <head>
       el.loop = true;
       el.preload = 'auto';
       var wanted = false, fadeTimer = null;
@@ -748,8 +756,8 @@
         if (!primed) { primed = true; seekTo(from); }
         try { el.volume = 0; } catch (e) {}
         var p = el.play();
-        if (p && p.then) p.then(function () { fade(1, 1800); }, function () { wanted = false; });
-        else fade(1, 1800);
+        if (p && p.then) p.then(function () { fade(1, 600); }, function () { wanted = false; });
+        else fade(1, 600);
       }
       function stop() {
         wanted = false;
@@ -761,11 +769,11 @@
           wanted = true; primed = true;
           try { el.currentTime = 0; el.volume = 0; } catch (e) {}
           var p = el.play(), settled = false;
-          if (!p || !p.then) { fade(1, 1800); resolve(true); return; }
-          p.then(function () { settled = true; fade(1, 1800); resolve(true); },
+          if (!p || !p.then) { fade(1, 250); resolve(true); return; }
+          p.then(function () { settled = true; fade(1, 250); resolve(true); },
                  function () { settled = true; wanted = false; resolve(false); });
-          // a slow connection shouldn't hold the intro hostage
-          setTimeout(function () { if (!settled) resolve(true); }, 1500);
+          // a very slow connection shouldn't hold the intro hostage
+          setTimeout(function () { if (!settled) resolve(true); }, 3000);
         });
       }
       // pause while the tab is in the background, pick back up when it returns
@@ -777,8 +785,13 @@
       window.addEventListener('pageshow', function (e) {
         if (e.persisted && wanted && Sound.on) { var p = el.play(); if (p && p.catch) p.catch(function () {}); }
       });
-      return { start: start, stop: stop, tryStart: tryStart };
+      return {
+        start: start, stop: stop, tryStart: tryStart,
+        playing: function () { return wanted && !el.paused; }
+      };
     })();
+    // a fresh visit starts the song right away, while the photos are still decoding
+    var songTry = !startInMenu && Sound.on ? Music.tryStart() : null;
 
     var soundBtn = document.querySelector('.sound');
     soundBtn.setAttribute('aria-pressed', String(Sound.on));
@@ -797,6 +810,27 @@
         if (!(e.target && e.target.closest && e.target.closest('.sound'))) Music.start();
       }, true);
     });
+
+    /* ---------- Keep the stickers clear of the title paper ----------
+       Fonts differ between devices, so measure where the tilted paper's bottom edge really is
+       above the left column (the lowest point over the stickers) and hand that to the CSS. */
+    var titleEl = menu.querySelector('.title'), grid = menu.querySelector('.grid');
+    function fitMenu() {
+      var w = titleEl.offsetWidth, h = titleEl.offsetHeight;
+      var a = (parseFloat(getComputedStyle(titleEl).rotate) || 0) * Math.PI / 180;
+      var cx = titleEl.offsetLeft + w / 2, cy = titleEl.offsetTop + h / 2;
+      // the paper's bottom-left corner after the tilt; its bottom edge rises at tan(a)
+      var x0 = cx - w / 2 * Math.cos(a) - h / 2 * Math.sin(a);
+      var y0 = cy - w / 2 * Math.sin(a) + h / 2 * Math.cos(a);
+      // the grid's width depends on the band, so let it settle over a few passes
+      for (var i = 0; i < 3; i++) {
+        var x = Math.max(x0, grid.offsetLeft);
+        menu.style.setProperty('--band', Math.max(0, Math.ceil(y0 + (x - x0) * Math.tan(a))) + 'px');
+      }
+    }
+    fitMenu();
+    window.addEventListener('resize', fitMenu);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitMenu);
 
     /* ---------- Bubbles canvas (transition burst + ambient) ---------- */
     var bubbles = [], rafOn = false, last = 0, ambient = false, nextAmbient = 0, wipeCtx = null;
@@ -1049,10 +1083,10 @@
           Music.start();
           return;
         }
-        if (!Sound.on) { beginIntro(); return; }
-        // wait for the song so it lines up with the wave; if the browser blocks autoplay,
-        // the intro runs anyway and the song starts from the top on the first tap or key press
-        Music.tryStart().then(function (playing) { waitingForTap = !playing; beginIntro(); });
+        if (!songTry) { beginIntro(); return; }
+        // the wave waits for the song so they begin together. If the browser blocked it, the
+        // intro runs anyway and the song starts from the top on the first tap or key press
+        songTry.then(function (playing) { waitingForTap = !playing && !Music.playing(); beginIntro(); });
       });
 
     function beginIntro() {
