@@ -987,7 +987,7 @@
 
       <span class="column column--broken" aria-hidden="true"><span class="column__cap"></span><span class="column__shaft"></span><span class="column__base"></span></span>
 
-      <a class="exit" href="index.html#menu" data-stop data-label="Return to the reef">
+      <a class="exit" href="./" data-stop data-label="Return to the reef">
         <span class="exit__arch" aria-hidden="true">
           <i style="--x:30%; --s:7px; --d:5s; --delay:0s"></i>
           <i style="--x:58%; --s:4px; --d:6.5s; --delay:1.6s"></i>
@@ -1002,7 +1002,7 @@
 
   <div class="caustics" aria-hidden="true"><div class="caustics__move"><i></i><i></i></div></div>
 
-  <a class="back" href="index.html#menu">
+  <a class="back" href="./">
     <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3L5 8l5 5"/></svg>
     The Reef
   </a>
@@ -1037,6 +1037,8 @@
 
   <script>
   (function () {
+    // clean URLs: an old /film.html link shows as /film
+    if (/\.html$/.test(location.pathname)) history.replaceState(null, '', location.pathname.replace(/\.html$/, '') + location.search + location.hash);
     var FILMS = {
       'gnomans-land':       { title: 'Gnoman’s Land',      meta: 'Co-written & co-directed with Lillian Whelan · 2026' },
       'the-great-mystery':  { title: 'The Great Mystery',  meta: 'Actor · Stanford Arts Intensive · 2026' },

@@ -83,7 +83,7 @@
     }
     .is-diving .reef img,
     .is-menu .reef img {
-      scale: 1;
+      scale: 1.04;   /* just past the drift, so the photo's edges never show */
       transition: scale 2.4s cubic-bezier(.2, .7, .2, 1);
     }
     @keyframes drift {
@@ -224,11 +224,14 @@
 
     /* ---------- Sticker menu ---------- */
     .menu {
-      --tf: clamp(29px, 3.45vw, 49px);   /* journal-paper title size */
-      --cell: min(21vw, calc(30 * var(--vh)), 260px);
+      --tf: clamp(28px, min(2.75vw, calc(5.2 * var(--vh))), 54px);   /* journal-paper title size */
+      --band: calc(var(--tf) * 4.4 + 8px);   /* room kept at the top for the paper */
+      --row-gap: clamp(10px, calc(4.5 * var(--vh)), 48px);
+      /* stickers take what's left: two rows (plus their tags and a little air) under the paper */
+      --cell: min(23vw, calc((100 * var(--vh) - var(--band) - var(--row-gap)) / 2 - 39px), 340px);
       display: grid;
       place-items: center;
-      padding-top: clamp(48px, calc(8 * var(--vh)), 96px);
+      padding-top: var(--band);
       pointer-events: none;
     }
     .is-menu .menu { pointer-events: auto; }
@@ -236,7 +239,7 @@
       display: grid;
       grid-template-columns: repeat(3, var(--cell));
       column-gap: clamp(14px, 5vw, 84px);
-      row-gap: clamp(10px, calc(4.5 * var(--vh)), 48px);
+      row-gap: var(--row-gap);
       margin: 0;
       padding: 0;
       list-style: none;
@@ -366,15 +369,15 @@
     .title {
       position: absolute;
       z-index: 2;
-      left: clamp(10px, 2.4vw, 40px);
-      top: clamp(14px, calc(3 * var(--vh)), 38px);
+      left: clamp(10px, 2.2vw, 40px);
+      top: calc(var(--tf) * .6 + 8px);   /* the slant lifts the right end; keep it on screen */
       margin: 0;
       font-size: var(--tf);
       font-weight: 500;
       font-style: italic;
       line-height: 1;
       white-space: nowrap;
-      rotate: -9deg;
+      rotate: -4deg;
       opacity: 0;
       pointer-events: none;
     }
@@ -407,7 +410,7 @@
     .title__name { margin: 0; font: inherit; }
     /* small note under the title; wraps to the title's width instead of widening the paper */
     .title__sub {
-      width: calc(var(--tf) * 7.6);
+      width: calc(var(--tf) * 14.5);
       min-width: 100%;
       margin: .45em 0 .2em;
       font-size: max(12.5px, calc(var(--tf) * .3));
@@ -491,6 +494,11 @@
     .sound .mute { opacity: 0; transition: opacity .2s ease; }
     .sound[aria-pressed="false"] .mute { opacity: 1; }
 
+    /* narrower screens put the left column right under the paper's low corner */
+    @media (max-width: 1100px) {
+      .menu { --band: calc(var(--tf) * 4.4 + 20px); }
+    }
+
     /* ---------- Small screens: 2 x 3 ---------- */
     @media (max-width: 640px) {
       .menu { --tf: 26px; --cell: min(42vw, calc(21 * var(--vh)), 200px); padding-top: 88px; }
@@ -532,22 +540,22 @@
     </div>
     <nav aria-label="Sections">
       <ul class="grid">
-        <li><a class="slot" href="film.html" data-sfx="shocked" style="--i:0; --tilt:-5deg; --tag:-3deg; --dur:3.8s; --delay:-.6s">
+        <li><a class="slot" href="film" data-sfx="shocked" style="--i:0; --tilt:-5deg; --tag:-3deg; --dur:3.8s; --delay:-.6s">
           <span class="bob"><span class="sticker"><img src="assets/sticker-camera.png" alt=""></span><span class="tag">Film &amp; Media</span></span>
         </a></li>
-        <li><a class="slot" href="about.html" style="--i:1; --tilt:3deg; --tag:3deg; --dur:4.1s; --delay:-3s">
+        <li><a class="slot" href="about" style="--i:1; --tilt:3deg; --tag:3deg; --dur:4.1s; --delay:-3s">
           <span class="bob"><span class="sticker"><img src="assets/sticker-face.png" alt=""></span><span class="tag">About Me!</span></span>
         </a></li>
-        <li><a class="slot" href="blog.html" style="--i:2; --tilt:4deg; --tag:2deg; --dur:4.4s; --delay:-2.1s; --size:.95">
+        <li><a class="slot" href="blog" style="--i:2; --tilt:4deg; --tag:2deg; --dur:4.4s; --delay:-2.1s; --size:.95">
           <span class="bob"><span class="sticker"><img src="assets/sticker-journal.png" alt=""></span><span class="tag">Blog</span></span>
         </a></li>
-        <li><a class="slot" href="research.html" data-sfx="catch" style="--i:3; --tilt:-2deg; --tag:-2deg; --dur:3.5s; --delay:-1.3s">
+        <li><a class="slot" href="research" data-sfx="catch" style="--i:3; --tilt:-2deg; --tag:-2deg; --dur:3.5s; --delay:-1.3s">
           <span class="bob"><span class="sticker"><img src="assets/sticker-microscope.png" alt=""></span><span class="tag">Research</span></span>
         </a></li>
-        <li><a class="slot" href="projects.html" data-sfx="greetings" style="--i:4; --tilt:-4deg; --tag:-1deg; --dur:3.9s; --delay:-.2s">
+        <li><a class="slot" href="projects" data-sfx="greetings" style="--i:4; --tilt:-4deg; --tag:-1deg; --dur:3.9s; --delay:-.2s">
           <span class="bob"><span class="sticker"><img src="assets/sticker-mask.png" alt=""></span><span class="tag">Projects</span></span>
         </a></li>
-        <li><a class="slot" href="venture.html" style="--i:5; --tilt:5deg; --tag:2deg; --dur:4.6s; --delay:-1.7s; --size:.95">
+        <li><a class="slot" href="venture" style="--i:5; --tilt:5deg; --tag:2deg; --dur:4.6s; --delay:-1.7s; --size:.95">
           <span class="bob"><span class="sticker"><img src="assets/sticker-fins.png" alt=""></span><span class="tag">Venture</span></span>
         </a></li>
       </ul>
@@ -607,7 +615,19 @@
     var fx = document.querySelector('.bubbles');
     var fxc = fx.getContext('2d');
     var state = 'loading';
-    var autoTimer, typeTimer, introTimer, lastInputWasKey = false;
+    var autoTimer, typeTimer, introTimer, lastInputWasKey = false, waitingForTap = false;
+
+    /* ---------- One URL for the reef ----------
+       A fresh visit gets the intro. Coming back from one of the site's pages (or reloading /
+       going back to the menu) opens straight onto the stickers. Old links like
+       /index.html#menu are tidied to /. */
+    var navType = '', seenMenu = false;
+    try { navType = performance.getEntriesByType('navigation')[0].type; } catch (e) {}
+    try { seenMenu = sessionStorage.getItem('agk-reef') === 'menu'; } catch (e) {}
+    var startInMenu = location.hash === '#menu' ||
+      document.referrer.indexOf(location.origin + '/') === 0 ||
+      (seenMenu && (navType === 'reload' || navType === 'back_forward'));
+    if (/\.html$/.test(location.pathname) || location.hash === '#menu') history.replaceState(null, '', './' + location.search);
 
     /* ---------- Sound: tiny synthesized blips, unlocked on first gesture ---------- */
     var Sound = (function () {
@@ -698,7 +718,7 @@
       // Coming back to the reef (#menu) picks the song up where it left off; a fresh visit
       // starts it from the top with the wave. The spot is kept per tab in sessionStorage.
       var KEY = 'agk-music', from = 0, primed = false, started = false;
-      if (location.hash === '#menu') { try { from = parseFloat(sessionStorage.getItem(KEY)) || 0; } catch (e) {} }
+      if (startInMenu) { try { from = parseFloat(sessionStorage.getItem(KEY)) || 0; } catch (e) {} }
       function seekTo(t) {
         if (!t) return;
         if (el.readyState >= 1) { try { el.currentTime = t; } catch (e) {} return; }
@@ -767,6 +787,7 @@
       soundBtn.setAttribute('aria-pressed', String(Sound.on));
       if (Sound.on) { Sound.unlock(); Sound.blip(); Music.start(); }
       else Music.stop();
+      songStarted();   // the opening screen stops waiting either way
     });
     // pointerup/touchend count as a "user gesture" on phones; pointerdown does for mice
     ['pointerdown', 'pointerup', 'touchend', 'keydown'].forEach(function (ev) {
@@ -877,9 +898,18 @@
       textEl.textContent = MESSAGE;
       dialog.classList.add('is-done');
       state = 'ready';
-      autoTimer = setTimeout(dive, 3800);
+      if (!waitingForTap) autoTimer = setTimeout(dive, 3800);
+    }
+    // If the browser blocked the song, the opening screen holds until the first tap.
+    // That tap only starts the song (on the opening screen), then the dive goes on as usual.
+    function songStarted() {
+      if (!waitingForTap) return false;
+      waitingForTap = false;
+      if (state === 'ready') autoTimer = setTimeout(dive, 3800);
+      return true;
     }
     function advance() {
+      if (songStarted()) return;
       if (state === 'intro') { clearTimeout(introTimer); typeMessage(); }
       else if (state === 'typing') finishTyping();
       else if (state === 'ready') dive();
@@ -918,6 +948,7 @@
     function enterMenu() {
       state = 'menu';
       body.classList.add('is-menu');
+      try { sessionStorage.setItem('agk-reef', 'menu'); } catch (e) {}
       ambient = true; runLoop();
       if (lastInputWasKey) slots[0].focus();
     }
@@ -1010,7 +1041,7 @@
     // never let a slow decode stall the intro
     Promise.race([decoded, new Promise(function (res) { setTimeout(res, 2500); })])
       .then(function () {
-        if (location.hash === '#menu') {
+        if (startInMenu) {
           hello.hidden = true; wipe.hidden = true;
           state = 'diving';
           body.classList.add('is-diving');
@@ -1021,7 +1052,7 @@
         if (!Sound.on) { beginIntro(); return; }
         // wait for the song so it lines up with the wave; if the browser blocks autoplay,
         // the intro runs anyway and the song starts from the top on the first tap or key press
-        Music.tryStart().then(beginIntro);
+        Music.tryStart().then(function (playing) { waitingForTap = !playing; beginIntro(); });
       });
 
     function beginIntro() {

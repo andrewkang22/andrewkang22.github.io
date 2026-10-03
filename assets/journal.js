@@ -3,6 +3,8 @@
 // scroll, resize and hash jumps (with an observer as a backup), so a page can never
 // stay hidden, no matter how tall it is.
 (function () {
+  // clean URLs: an old /venture.html link shows as /venture
+  if (/\.html$/.test(location.pathname)) history.replaceState(null, '', location.pathname.replace(/\.html$/, '') + location.search + location.hash);
   var root = document.documentElement;
   root.classList.add('js');
   var pages = Array.prototype.slice.call(document.querySelectorAll('.page'));
